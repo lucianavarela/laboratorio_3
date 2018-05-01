@@ -110,12 +110,10 @@ class Alumno
 			if($ListaDeAlumnosLeidos[$i]->legajo == $obj->legajo){//encontre el modificado, lo excluyo
 				$imagenParaBorrar = trim($ListaDeAlumnosLeidos[$i]->pathFoto);
 				$ListaDeAlumnosLeidos[$i] = $obj;
-				//continue;
+				continue;
 			}
-			//$ListaDeAlumnos[$i] = $ListaDeAlumnosLeidos[$i];
+			$ListaDeAlumnos[$i] = $ListaDeAlumnosLeidos[$i];
 		}
-
-		//array_push($ListaDeAlumnos, $obj);//agrego el alumno modificado
 		
 		//BORRO LA IMAGEN ANTERIOR
 		unlink("archivos/".$imagenParaBorrar);

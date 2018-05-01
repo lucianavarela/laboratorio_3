@@ -38,7 +38,6 @@ if ($request) {
 		
 		case "Modificar":
 			$legajo = isset($_POST['legajo']) ? $_POST['legajo'] : NULL;
-		
 			if(!Alumno::Modificar($legajo)){
 				echo "Lamentablemente ocurrio un error y no se pudo escribir en el archivo.";
 			} else {

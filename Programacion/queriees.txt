@@ -1,0 +1,4 @@
+select count(*) as cantidad
+from usuario_puesto as ut, usuario as u, puestotrabajo as t
+where u.id_usuario = ut.id_usuario
+and t.id_puesto = ut.id_puesto
