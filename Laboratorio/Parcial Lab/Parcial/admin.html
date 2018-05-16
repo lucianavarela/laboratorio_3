@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="scripts/admin.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+    <title>Blog de Viajes</title>
+</head>
+
+<body>
+    <header>
+        <div class="contenedor">
+            <div class="logo">
+                <img src="img/logo.png" alt="Logo Blog de Viajes">
+            </div>
+        </div>
+    </header>
+    <div class="navegacion">
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#">Nosotros</a>
+                    <ul>
+                        <li><a href="#">Misión</a></li>
+                        <li><a href="#">Visión</a></li>
+                        <li><a href="#">Valores</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Blog</a>
+                    <ul>
+                        <li><a href="#">Consejos</a></li>
+                        <li><a href="#">Ciudades</a></li>
+                        <li><a href="#">Promociones</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Contacto</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                
+            </ul>
+        </nav>
+
+    </div>
+
+    <div class="contenido contenedor">
+        <main id="tablaCarga">
+            <form action="cargarArticulo" method="post">
+                <label for="titulo">Titulo</label>
+                <input type="text" id="titulo">
+                <label for="articulo">Articulo</label>
+                <textarea id="articulo"cols="80" rows="10"></textarea>
+                <label for="mas">Mas</label>
+                <input type="text" id="mas">
+                <input type="button" value="Guardar" onclick="guardarArticulo()">
+            </form>
+        </main>
+        <aside class="sidebar">
+            <h2>Otros posts</h2>
+            <ul>
+            </ul>
+        </aside>
+        <div id="tablaArticulos"></div>
+    </div>
+    <footer>
+        <div class="contenedor">
+            <div class="nosotros">
+                <h2>Sobre Nosotros</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut tortor et ex viverra ullamcorper. Vivamus
+                    at lacinia quam. Aliquam a laoreet dui. In hac habitasse platea dictumst. Aliquam nec molestie magna.
+                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi tincidunt
+                    efficitur justo, at pulvinar arcu lobortis sit amet. Integer vel enim vitae urna dictum efficitur
+                </p>
+            </div>
+            <div class="menu">
+                <nav>
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Nosotros</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Tienda</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <p class="derechos">
+            Todos los derechos reservados &copy;. Blog de viajes 2017
+        </p>
+    </footer>
+    <div id="loader" class="is-hidden">
+        <img src="img/spinner.gif" alt="spiner">
+    </div>
+</body>
+
+</html>
