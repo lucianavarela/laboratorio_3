@@ -8,12 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $helado_nuevo = Helado::Nuevo($_POST['sabor'], $_POST['tipo'], $_POST['cantidad'], $_POST['precio']);
             if ($helado_nuevo != NULL) {
                 echo "Listo! Se cargo el helado N°".$helado_nuevo->Guardar();
+            } else {
+                echo "ERROR en carga";
             }
         } else {
-            echo"ERROR";
+            echo"ERROR en tipo";
         }
     } else {
-        echo"ERROR";
+        echo"ERROR, valores faltantes";
     }
 }
 ?>

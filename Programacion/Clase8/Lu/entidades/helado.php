@@ -55,7 +55,7 @@ class Helado
 //--TOSTRING
   	public function ToString()
 	{
-	  	return $this->sabor." - ".$this->tipo." - ".$this->precio."\r\n";
+	  	return $this->sabor." - ".$this->tipo." - ".$this->cantidad." - ".$this->precio."\r\n";
 	}
 //--------------------------------------------------------------------------------//
 
@@ -75,7 +75,12 @@ class Helado
 	{
 		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 		$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into helados (sabor, tipo, precio, cantidad)values('$this->sabor','$this->tipo','$this->precio','$this->cantidad');");
-		$consulta->execute();
+		try {
+			$consulta->execute();
+		} catch (Exception $e) {
+            print "Error!: " . $e->getMessage(); 
+            die();
+        }
 		return $objetoAccesoDato->RetornarUltimoIdInsertado();
 	}
 
@@ -98,107 +103,12 @@ class Helado
 		}
 	}
 
-	public static function TraerTodosLosHelados()
-	{
-		$ListaDeHeladosLeidos = array();
-		//leo todos los helados del archivo
-		$archivo=fopen("archivos/helados.txt", "r");
-		
-		while(!feof($archivo))
-		{
-			$archAux = fgets($archivo);
-			$helados = explode(" - ", $archAux);
-			$helados[0] = trim($helados[0]);
-			if($helados[0] != ""){
-				$ListaDeHeladosLeidos[] = new Helado($helados[0], $helados[1],$helados[2]);
-			}
-		}
-		fclose($archivo);
-		
-		return $ListaDeHeladosLeidos;
-		
+	public static function ValidarId ($id) {
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		$consulta =$objetoAccesoDato->RetornarConsulta("select * from helados WHERE id='$id';");
+		$consulta->execute();
+		$heladoBuscado = $consulta->fetchObject("Helado");
+		var_dump($heladoBuscado);
+		return $heladoBuscado;
 	}
-	public static function Modificar($obj)
-	{
-		$resultado = TRUE;
-		
-		$ListaDeHeladosLeidos = Helado::TraerTodosLosHelados();
-		$ListaDeHelados = array();
-		$imagenParaBorrar = NULL;
-		
-		for($i=0; $i<count($ListaDeHeladosLeidos); $i++){
-			if($ListaDeHeladosLeidos[$i]->sabor == $obj->sabor){//encontre el modificado, lo excluyo
-				$imagenParaBorrar = trim($ListaDeHeladosLeidos[$i]->precio);
-				$ListaDeHeladosLeidos[$i] = $obj;
-				//continue;
-			}
-			//$ListaDeHelados[$i] = $ListaDeHeladosLeidos[$i];
-		}
-
-		//array_push($ListaDeHelados, $obj);//agrego el helado modificado
-		
-		//BORRO LA IMAGEN ANTERIOR
-		unlink("archivos/".$imagenParaBorrar);
-		
-		//ABRO EL ARCHIVO
-		$ar = fopen("archivos/helados.txt", "w");
-		
-		//ESCRIBO EN EL ARCHIVO
-		foreach($ListaDeHeladosLeidos AS $item){
-			$cant = fwrite($ar, $item->ToString());
-			
-			if($cant < 1)
-			{
-				$resultado = FALSE;
-				break;
-			}
-		}
-		
-		//CIERRO EL ARCHIVO
-		fclose($ar);
-		
-		return $resultado;
-	}
-	public static function Eliminar($sabor)
-	{
-		if($sabor === NULL)
-			return FALSE;
-			
-		$resultado = TRUE;
-		
-		$ListaDeHeladosLeidos = Helado::TraerTodosLosHelados();
-		$ListaDeHelados = array();
-		$imagenParaBorrar = NULL;
-		
-		for($i=0; $i<count($ListaDeHeladosLeidos); $i++){
-			if($ListaDeHeladosLeidos[$i]->sabor == $sabor){//encontre el borrado, lo excluyo
-				$imagenParaBorrar = trim($ListaDeHeladosLeidos[$i]->precio);
-				continue;
-			}
-			$ListaDeHelados[$i] = $ListaDeHeladosLeidos[$i];
-		}
-
-		//BORRO LA IMAGEN ANTERIOR
-		unlink("archivos/".$imagenParaBorrar);
-		
-		//ABRO EL ARCHIVO
-		$ar = fopen("archivos/helados.txt", "w");
-		
-		//ESCRIBO EN EL ARCHIVO
-		foreach($ListaDeHelados AS $item){
-			$cant = fwrite($ar, $item->ToString());
-			
-			if($cant < 1)
-			{
-				$resultado = FALSE;
-				break;
-			}
-		}
-		
-		//CIERRO EL ARCHIVO
-		fclose($ar);
-		
-		return $resultado;
-	}
-//--------------------------------------------------------------------------------//
 }
