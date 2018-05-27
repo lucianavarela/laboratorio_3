@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.8.0
+-- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-05-2018 a las 01:56:22
--- Versión del servidor: 10.1.19-MariaDB
--- Versión de PHP: 5.6.28
+-- Tiempo de generación: 28-05-2018 a las 00:09:23
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -39,8 +41,8 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`id`, `nombre`, `nacionalidad`, `sexo`, `edad`) VALUES
-(3, 'Adriel', 'Argentina', 'f', 24),
 (6, 'Adriel', 'Argentina', 'm', 25),
+(3, 'Agustina', 'Argentina', 'f', 28),
 (4, 'Luciana', 'Argentina', 'f', 24);
 
 -- --------------------------------------------------------
@@ -142,10 +144,20 @@ CREATE TABLE `venta` (
   `idLocal` int(11) NOT NULL,
   `idCliente` int(11) NOT NULL,
   `idEmpleado` int(11) NOT NULL,
-  `fecha` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
   `cantidad` int(11) NOT NULL,
   `importe` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `venta`
+--
+
+INSERT INTO `venta` (`id`, `idHelado`, `idLocal`, `idCliente`, `idEmpleado`, `fecha`, `cantidad`, `importe`) VALUES
+(8, 1, 1, 3, 1, '2018-05-27 23:33:19', 100, 1000),
+(9, 1, 1, 3, 1, '2018-05-27 23:45:14', 100, 1000),
+(10, 1, 1, 3, 1, '2018-05-27 23:48:45', 100, 1000),
+(11, 1, 1, 3, 1, '2018-05-27 23:49:18', 100, 1000);
 
 --
 -- Índices para tablas volcadas
@@ -198,31 +210,38 @@ ALTER TABLE `venta`
 --
 ALTER TABLE `clientes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `helados`
 --
 ALTER TABLE `helados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT de la tabla `local`
 --
 ALTER TABLE `local`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `localidad`
 --
 ALTER TABLE `localidad`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
