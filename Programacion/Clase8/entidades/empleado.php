@@ -3,6 +3,7 @@ class Empleado
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	protected $id;
 	protected $nombre;
 	protected $tipo;
 	protected $turno;

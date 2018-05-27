@@ -3,6 +3,7 @@ class Cliente
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	protected $id;
 	protected $nombre;
 	protected $nacionalidad;
 	protected $sexo;

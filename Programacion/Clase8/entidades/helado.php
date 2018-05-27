@@ -3,6 +3,7 @@ class Helado
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	protected $id;
 	protected $sabor;
 	protected $tipo;
 	protected $precio;
@@ -70,9 +71,20 @@ class Helado
 		$helado_nuevo->cantidad = (float)$cantidad;
 		return $helado_nuevo;
 	}
+	
+	public function GestionarVenta($cantidad) {
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		$consulta =$objetoAccesoDato->RetornarConsulta("UPDATE helados SET cantidad='$this->cantidad-$cantidad' WHERE id='$this->id'");
+		try {
+			$consulta->execute();
+		} catch (Exception $e) {
+            print "Error!: " . $e->getMessage(); 
+            die();
+        }
+		return $objetoAccesoDato->RetornarUltimoIdInsertado();
+	}
 
-	public function Guardar()
-	{
+	public function Guardar() {
 		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 		$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into helados (sabor, tipo, precio, cantidad)values('$this->sabor','$this->tipo','$this->precio','$this->cantidad');");
 		try {
@@ -108,7 +120,6 @@ class Helado
 		$consulta =$objetoAccesoDato->RetornarConsulta("select * from helados WHERE id='$id';");
 		$consulta->execute();
 		$heladoBuscado = $consulta->fetchObject("Helado");
-		var_dump($heladoBuscado);
 		return $heladoBuscado;
 	}
 }

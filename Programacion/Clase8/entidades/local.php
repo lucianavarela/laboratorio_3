@@ -3,6 +3,7 @@ class Local
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	protected $id;
 	protected $dirección;
 	protected $estado;
 	protected $idLocalidad;

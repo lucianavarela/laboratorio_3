@@ -3,6 +3,7 @@ class Localidad
 {
 //--------------------------------------------------------------------------------//
 //--ATRIBUTOS
+	protected $id;
 	protected $nombre;
 	protected $estado;
 	protected $provincia;
