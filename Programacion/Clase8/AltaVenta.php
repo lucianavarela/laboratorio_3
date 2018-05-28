@@ -8,11 +8,8 @@ require_once ("Entidades/AccesoDatos.php");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['idL']) && isset($_POST['idC']) && isset($_POST['idE']) && isset($_POST['idH']) && isset($_POST['cantidad'])) {
         $helado = Helado::ValidarId($_POST['idH']);
-        var_dump($helado);
-        print("helado: ".$helado->GetCantidad()." y compra por ".$_POST['cantidad']);
         if($helado && Cliente::ValidarId($_POST['idC']) && Empleado::ValidarId($_POST['idE']) && Local::ValidarId($_POST['idL'])) {
-            print("helado: ".$helado->GetCantidad()." y compra por ".$_POST['cantidad']);
-            if ($helado->GetCantidad() <= $_POST['cantidad']) {
+            if ($helado->GetCantidad() >= $_POST['cantidad']) {
                 $importe_total = $helado->GetPrecio()*(int)$_POST['cantidad'];
                 $venta_nueva = Venta::Nuevo($_POST['idL'],$_POST['idC'],$_POST['idE'],$_POST['idH'],$_POST['cantidad'], $importe_total);
                 if ($venta_nueva != NULL) {

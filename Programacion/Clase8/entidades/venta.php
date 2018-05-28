@@ -83,8 +83,9 @@ class Venta
 		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
 		$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into venta (idHelado, idLocal, idCliente, idEmpleado, fecha, cantidad, importe)values('$this->idHelado', '$this->idLocal', '$this->idCliente', '$this->idEmpleado', '$this->fecha', '$this->cantidad', '$this->importe');");
 		try {
-			$consulta->execute();
-			Helado::ValidarId($this->idHelado)->GestionarVenta($this->cantidad);
+			if (Helado::ValidarId($this->idHelado)->GestionarVenta($this->cantidad)) {
+				$consulta->execute();
+			}
 		} catch (Exception $e) {
             print "Error!: " . $e->getMessage(); 
             die();

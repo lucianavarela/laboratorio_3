@@ -73,15 +73,16 @@ class Helado
 	}
 	
 	public function GestionarVenta($cantidad) {
-		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-		$consulta =$objetoAccesoDato->RetornarConsulta("UPDATE helados SET cantidad='$this->cantidad-$cantidad' WHERE id='$this->id'");
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+		$remanente = $this->cantidad-$cantidad;
+		$consulta =$objetoAccesoDato->RetornarConsulta("UPDATE helados SET cantidad='$remanente' WHERE id='$this->id'");
 		try {
 			$consulta->execute();
+			return true;
 		} catch (Exception $e) {
             print "Error!: " . $e->getMessage(); 
             die();
         }
-		return $objetoAccesoDato->RetornarUltimoIdInsertado();
 	}
 
 	public function Guardar() {
