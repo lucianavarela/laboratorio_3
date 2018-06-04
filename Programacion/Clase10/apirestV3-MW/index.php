@@ -22,14 +22,11 @@ desarrollo para obtener información sobre los errores
 */
 
 
-
-
-
 $app = new \Slim\App(["settings" => $config]);
 
 /* FUNCION MIDDELWARE*/
 $VerificadorDeCredenciales = function ($request, $response, $next) {
-
+//var_dump($request);
   if($request->isGet())
   {
      $response->getBody()->write('<p>NO necesita credenciales para los get</p>');
@@ -78,7 +75,6 @@ $app->add(function ($request, $response, $next) {
   $response->getBody()->write('<p>Antes de ejecutar UNO </p>');
   $response = $next($request, $response);
   $response->getBody()->write('<p>Despues de ejecutar UNO</p>');
-
   return $response;
 });
 
@@ -86,7 +82,6 @@ $app->add(function ($request, $response, $next) {
   $response->getBody()->write('<p>Antes de ejecutar DOS </p>');
   $response = $next($request, $response);
   $response->getBody()->write('<p>Despues de ejecutar DOS</p>');
-
   return $response;
 });
 // despues de esto y llamando a la ruta cd/, el resultaso es este :
