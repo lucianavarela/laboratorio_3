@@ -1,6 +1,6 @@
 function apirest_get(){
 
-    var pagina = "http://localhost:8080/apirest_starter/apirest.php/cd";
+    var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
     $.ajax({
         type: 'GET',
@@ -14,14 +14,14 @@ function apirest_get(){
 
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
-        alert(jqXHR.responseText + "\n" + textStatus + "\n" + errorThrown);
+        alert(errorThrown);
     });    
 
 }
 
 function apirest_post(){
 
-    var pagina = "http://localhost:8080/apirest_starter/apirest.php/cd";
+    var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
     $.ajax({
         type: 'POST',
@@ -46,7 +46,7 @@ function apirest_post(){
 
 function apirest_put(){
 
-    var pagina = "http://localhost:8080/apirest_starter/apirest.php/cd";
+    var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
     $.ajax({
         type: 'PUT',
@@ -72,7 +72,7 @@ function apirest_put(){
 }
 function apirest_delete(id){
 
-    var pagina = "http://localhost:8080/apirest_starter/apirest.php/cd";
+    var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
     $.ajax({
         type: 'DELETE',
@@ -95,7 +95,7 @@ function apirest_delete(id){
 
 function apirest_get_uno(id){
 
-    var pagina = "http://localhost:8080/apirest_starter/apirest.php/cd/"+id;
+    var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd/"+id;
 
     $.ajax({
         type: 'GET',
