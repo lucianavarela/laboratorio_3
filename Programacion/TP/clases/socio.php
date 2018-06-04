@@ -1,27 +1,27 @@
     <?php
-    class clase
+    class socio
     {
     public $id;
     public $param1;
     public $param2;
     public $param3;
-    public function BorrarClase()
+    public function BorrarSocio()
         {
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
             $consulta =$objetoAccesoDato->RetornarConsulta("
                 delete 
-                from clases 				
+                from socios 				
                 WHERE id=:id");	
                 $consulta->bindValue(':id',$this->id, PDO::PARAM_INT);		
                 $consulta->execute();
                 return $consulta->rowCount();
         }
 
-        public function ModificarClase()
+        public function ModificarSocio()
         {
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
             $consulta =$objetoAccesoDato->RetornarConsulta("
-                update clases 
+                update socios 
                 set param1='$this->param1',
                 param2='$this->param2',
                 param3='$this->param3'
@@ -29,19 +29,19 @@
             return $consulta->execute();
         }
 
-        public function InsertarClase()
+        public function InsertarSocio()
         {
                 $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-                $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into clases (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
+                $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into socios (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
                 $consulta->execute();
                 return $objetoAccesoDato->RetornarUltimoIdInsertado();
                 
         }
-        public function ModificarClaseParametros()
+        public function ModificarSocioParametros()
         {
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
             $consulta =$objetoAccesoDato->RetornarConsulta("
-                update clases 
+                update socios 
                 set param1=:param1,
                 param2=:param2,
                 param3=:param3
@@ -53,9 +53,9 @@
             return $consulta->execute();
         }
         
-        public function InsertarClaseParametros() {
+        public function InsertarSocioParametros() {
                 $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-                $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into clases (param1,param2,param3)values(:param1,:param2,:param3)");
+                $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into socios (param1,param2,param3)values(:param1,:param2,:param3)");
                 $consulta->bindValue(':param1',$this->param1, PDO::PARAM_INT);
                 $consulta->bindValue(':param3', $this->param3, PDO::PARAM_STR);
                 $consulta->bindValue(':param2', $this->param2, PDO::PARAM_STR);
@@ -63,27 +63,27 @@
                 return $objetoAccesoDato->RetornarUltimoIdInsertado();
         }
 
-        public function GuardarClase() {
+        public function GuardarSocio() {
         if ($this->id > 0) {
-            $this->ModificarClaseParametros();
+            $this->ModificarSocioParametros();
         } else {
-            $this->InsertarClaseParametros();
+            $this->InsertarSocioParametros();
         }
     }
 
-    public static function TraerClases() {
+    public static function TraerSocios() {
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-            $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from clases");
+            $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from socios");
             $consulta->execute();
-            return $consulta->fetchAll(PDO::FETCH_CLASS, "clase");
+            return $consulta->fetchAll(PDO::FETCH_CLASS, "socio");
     }
 
-    public static function TraerClase($id) {
+    public static function TraerSocio($id) {
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-            $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from clases where id = $id");
+            $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from socios where id = $id");
             $consulta->execute();
-            $claseResultado= $consulta->fetchObject('clase');
-            return $claseResultado;
+            $socioResultado= $consulta->fetchObject('socio');
+            return $socioResultado;
     }
 
     public function mostrarDatos()

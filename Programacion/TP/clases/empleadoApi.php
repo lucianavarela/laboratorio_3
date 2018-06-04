@@ -1,18 +1,18 @@
 <?php
-require_once 'clase.php';
+require_once 'empleado.php';
 require_once 'IApiUsable.php';
-class claseApi extends clase implements IApiUsable
+class empleadoApi extends empleado implements IApiUsable
 {
 	public function TraerUno($request, $response, $args) {
 		$id=$args['id'];
-		$claseObj=clase::TraerClase($id);
-		$newResponse = $response->withJson($claseObj, 200);  
+		$empleadoObj=empleado::TraerEmpleado($id);
+		$newResponse = $response->withJson($empleadoObj, 200);  
 		return $newResponse;
 	}
 
 	public function TraerTodos($request, $response, $args) {
-		$clases=clase::TraerClases();
-		$newResponse = $response->withJson($clases, 200);  
+		$empleados=empleado::TraerEmpleados();
+		$newResponse = $response->withJson($empleados, 200);  
 		return $newResponse;
 	}
 
@@ -21,27 +21,27 @@ class claseApi extends clase implements IApiUsable
 		$param1= $ArrayDeParametros['param1'];
 		$param2= $ArrayDeParametros['param2'];
 		$param3= $ArrayDeParametros['param3'];
-		$miclase = new clase();
-		$miclase->param1=$param1;
-		$miclase->param2=$param2;
-		$miclase->param3=$param3;
-		$miclase->InsertarClaseParametros();
+		$miempleado = new empleado();
+		$miempleado->param1=$param1;
+		$miempleado->param2=$param2;
+		$miempleado->param3=$param3;
+		$miempleado->InsertarEmpleadoParametros();
 		$archivos = $request->getUploadedFiles();
 		$destino="./fotos/";
 		$nombreAnterior=$archivos['foto']->getClientFilename();
 		$extension= explode(".", $nombreAnterior)  ;
 		$extension=array_reverse($extension);
 		$archivos['foto']->moveTo($destino.$param1.".".$extension[0]);
-		$response->getBody()->write("se guardo el clase");
+		$response->getBody()->write("se guardo el empleado");
 		return $response;
 	}
 
 	public function BorrarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
 		$id=$ArrayDeParametros['id'];
-		$clase= new clase();
-		$clase->id=$id;
-		$cantidadDeBorrados=$clase->BorrarClase();
+		$empleado= new empleado();
+		$empleado->id=$id;
+		$cantidadDeBorrados=$empleado->BorrarEmpleado();
 		$objDelaRespuesta= new stdclass();
 		$objDelaRespuesta->cantidad=$cantidadDeBorrados;
 		if($cantidadDeBorrados>0)
@@ -60,12 +60,12 @@ class claseApi extends clase implements IApiUsable
 		//$response->getBody()->write("<h1>Modificar  uno</h1>");
 		$ArrayDeParametros = $request->getParsedBody();
 		//var_dump($ArrayDeParametros);    	
-		$miclase = new clase();
-		$miclase->id=$ArrayDeParametros['id'];
-		$miclase->param1=$ArrayDeParametros['param1'];
-		$miclase->param2=$ArrayDeParametros['param2'];
-		$miclase->param3=$ArrayDeParametros['param3'];
-		$resultado =$miclase->ModificarClaseParametros();
+		$miempleado = new empleado();
+		$miempleado->id=$ArrayDeParametros['id'];
+		$miempleado->param1=$ArrayDeParametros['param1'];
+		$miempleado->param2=$ArrayDeParametros['param2'];
+		$miempleado->param3=$ArrayDeParametros['param3'];
+		$resultado =$miempleado->ModificarEmpleadoParametros();
 		$objDelaRespuesta= new stdclass();
 		//var_dump($resultado);
 		$objDelaRespuesta->resultado=$resultado;
