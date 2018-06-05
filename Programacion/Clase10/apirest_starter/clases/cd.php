@@ -1,5 +1,5 @@
 <?php
-class tabla
+class cd
 {
 	public $id;
  	public $valorChar;
@@ -20,42 +20,35 @@ class tabla
 				return $consulta->rowCount();
 	 }
 
-	public static function BorrarCdPorvalorInt($valorInt)
+	public static function BorrarCdPorValorInt($valorInt)
 	 {
-
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("
-				delete 
-				from tabla 				
-				WHERE valorInt=:valorInt");	
-				$consulta->bindValue(':valorInt',$valorInt, PDO::PARAM_valorInt);		
-				$consulta->execute();
-				return $consulta->rowCount();
-
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		$consulta =$objetoAccesoDato->RetornarConsulta("
+			delete 
+			from tabla 				
+			WHERE valorInt='$valorInt'");
+			$consulta->execute();
+			return $consulta->rowCount();
 	 }
 	public function ModificarCd()
 	 {
-
-			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("
-				update valorDate tabla 
-				set valorChar='$this->valorChar',
-				valorDate='$this->valorDate',
-				valorInt='$this->valorInt'
-				WHERE id='$this->id'");
-			return $consulta->execute();
-
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		$consulta =$objetoAccesoDato->RetornarConsulta("
+			update valorDate tabla 
+			set valorChar='$this->valorChar',
+			valorDate='$this->valorDate',
+			valorInt='$this->valorInt'
+			WHERE id='$this->id'");
+		return $consulta->execute();
 	 }
 	
   
 	 public function InsertarElCd()
 	 {
-				$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-				$consulta =$objetoAccesoDato->RetornarConsulta("INSERT valorInto tabla (valorChar,valorDate,valorInt)values('$this->valorChar','$this->valorDate','$this->valorInt')");
-				$consulta->execute();
-				return $objetoAccesoDato->RetornarUltimoIdInsertado();
-				
-
+		$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+		$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into tabla (valorChar,valorDate,valorInt) values ('$this->valorChar','$this->valorDate','$this->valorInt')");
+		$consulta->execute();
+		return $objetoAccesoDato->RetornarUltimoIdInsertado();
 	 }
 
 	  public function ModificarCdParametros()
@@ -77,13 +70,14 @@ class tabla
 	 public function InsertarElCdParametros()
 	 {
 				$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-				$consulta =$objetoAccesoDato->RetornarConsulta("INSERT valorInto tabla (valorChar,valorDate,valorInt)values(:valorChar,:valorDate,:valorInt)");
+				$consulta =$objetoAccesoDato->RetornarConsulta("INSERT into tabla (valorChar,valorDate,valorInt)values(:valorChar,:valorDate,:valorInt)");
 				$consulta->bindValue(':valorChar',$this->valorChar, PDO::PARAM_valorInt);
 				$consulta->bindValue(':valorInt', $this->valorInt, PDO::PARAM_STR);
 				$consulta->bindValue(':valorDate', $this->valorDate, PDO::PARAM_STR);
 				$consulta->execute();		
 				return $objetoAccesoDato->RetornarUltimoIdInsertado();
 	 }
+
 	 public function GuardarCD()
 	 {
 
@@ -97,10 +91,10 @@ class tabla
 	 }
 
 
-  	public static function TraerTodoLostabla()
+  	public static function TraerTodo()
 	{
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,valorChar as valorChar, valorDate as valorDate,valorInt as valorInt from tabla");
+			$consulta =$objetoAccesoDato->RetornarConsulta("select * from tabla");
 			$consulta->execute();			
 			return $consulta->fetchAll(PDO::FETCH_CLASS, "cd");		
 	}

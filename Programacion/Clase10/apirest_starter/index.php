@@ -27,7 +27,9 @@
             </div>
         </nav>
         <div class="container">
-            <div id="divTabla"></div>
+            <div id="divTabla">
+            
+            </div>
         </div>
     </body>
 </html>

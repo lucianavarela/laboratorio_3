@@ -1,4 +1,4 @@
-function apirest_get(){
+function traerTodos(){
 
     var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
@@ -9,9 +9,18 @@ function apirest_get(){
         async: true
     })
     .done(function (objJson) {
-
-        $("#divTabla").html(objJson.Mensaje);
-
+        html = '<table style="border:1px solid gray">';
+        for (i in objJson.Lineas) {
+            html += '<tr style="border:1px solid orange">'+
+            '<th style="border:1px solid orange; padding:3px">'+objJson.Lineas[i].valorChar+'</th>'+
+            '<th style="border:1px solid orange; padding:3px">'+objJson.Lineas[i].valorInt+'</th>'+
+            '<th style="border:1px solid orange; padding:3px">'+objJson.Lineas[i].valorDate+'</th>'+
+            '<th style="border:1px solid orange; padding:3px"><input type="button" value="Modificar" onclick=modificar('+objJson.Lineas[i].valorInt+')></th>'+
+            '<th style="border:1px solid orange; padding:3px"><input type="button" value="Eliminar" onclick=borrar('+objJson.Lineas[i].valorInt+')></th>'+
+            '</tr>'
+        }
+        html += '</table>';
+        $("#divTabla").html(html);
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
         alert(errorThrown);
@@ -19,7 +28,7 @@ function apirest_get(){
 
 }
 
-function apirest_post(){
+function agregar(){
 
     var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
@@ -35,16 +44,20 @@ function apirest_post(){
         async: true
         })
     .done(function (objJson) {
-
-        $("#divTabla").html(objJson.Mensaje + "<br>" + objJson.v1 + "<br>" + objJson.v2+ "<br>" + objJson.v3);       
-
+       // location = 'laboratorio_3/Programacion/Clase10/apirest_starter/listado.php';
+       console.log("bien ahi");
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("error");
+        console.info("textStatus",jqXHR);
+        console.info("textStatus",textStatus);
+        console.info("textStatus",errorThrown);
+        alert(jqXHR.responseText + "\n" + textStatus + "\n" + errorThrown);
     });    
 
 }
 
-function apirest_put(){
+function modificar(){
 
     var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
 
@@ -70,10 +83,8 @@ function apirest_put(){
     });    
 
 }
-function apirest_delete(id){
-
+function borrar(id){
     var pagina = "http://localhost:8080/laboratorio_3/Programacion/Clase10/apirest_starter/apirest.php/cd";
-
     $.ajax({
         type: 'DELETE',
         url: pagina,
@@ -84,11 +95,10 @@ function apirest_delete(id){
         async: true
     })
     .done(function (objJson) {
-
-        $("#divTabla").html(objJson.Mensaje + "<br>" + objJson.v1);
+        location.reload();
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
-        alert(jqXHR.responseText + "\n" + textStatus + "\n" + errorThrown);
+        alert(errorThrown);
     });    
 
 }

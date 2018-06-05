@@ -1,5 +1,7 @@
 <?php
 require_once "vendor/autoload.php";
+require_once "clases/AccesoDatos.php";
+require_once "clases/cd.php";
 
 $app = new \Slim\Slim();
 
@@ -40,8 +42,9 @@ function saludar(){
 // Si necesitamos acceder a alguna variable global en el framework
 // Tenemos que pasarla con use() en la cabecera de la función. Ejemplo: use($app)
 $app->get('/cd', function() use($app) {
-
-    $resultados["Mensaje"] = "GET";
+	$cds = cd::TraerTodo();
+	$resultados["Mensaje"] = "GET";
+	$resultados["Lineas"] = $cds;
 // Indicamos el tipo de contenido y condificación que devolvemos desde el framework Slim.
 	$app->response->headers->set("Content-type", "application/json");
 	$app->response->status(200);
@@ -56,7 +59,11 @@ $app->post("/cd", function() use($app)
 	$valor_char = $app->request->post("valorChar");
 	$valor_date = $app->request->post("valorDate");
 	$valor_int = $app->request->post("valorInt");
-
+	$nueva_linea = new cd();
+	$nueva_linea->valorChar = $valor_char;
+	$nueva_linea->valorInt = $valor_int;
+	$nueva_linea->valorDate = $valor_date;
+	$nueva_linea->InsertarElCd();
 	$res = array("Mensaje" => "POST", "v1" => $valor_char, "v2" => $valor_date, "v3" => $valor_int);	
 	
 // Indicamos el tipo de contenido y condificación que devolvemos desde el framework Slim.
@@ -90,7 +97,7 @@ $app->delete("/cd", function() use($app)
 	// Recuperamos los valores con $app->request->'metodo'("key")
 	// 'metodo' -> post, put o delete
 	$id = $app->request->delete("id");
-
+	$cds = cd::BorrarCdPorValorInt($id);
 	$res = array("Mensaje" => "DELETE", "v1" => $id);
 // Indicamos el tipo de contenido y condificación que devolvemos desde el framework Slim.
 	$app->response->headers->set("Content-type", "application/json");

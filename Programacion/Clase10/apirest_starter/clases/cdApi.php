@@ -21,12 +21,11 @@ class cdApi extends cd implements IApiUsable
         $titulo= $ArrayDeParametros['titulo'];
         $cantante= $ArrayDeParametros['cantante'];
         $año= $ArrayDeParametros['anio'];
-        
-        $micd = new cd();
-        $micd->titulo=$titulo;
-        $micd->cantante=$cantante;
-        $micd->año=$año;
-        $micd->InsertarElCdParametros();
+        $nueva_linea = new cd();
+		$nueva_linea->valorChar = $valor_char;
+		$nueva_linea->valorInt = $valor_int;
+		$nueva_linea->valorDate = $valor_date;
+        $nueva_linea->InsertarElCd();
 
         $archivos = $request->getUploadedFiles();
         $destino="./fotos/";
