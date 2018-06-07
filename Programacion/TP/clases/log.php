@@ -1,25 +1,25 @@
 <?php
-class Empleado
+class Log
 {
     public $id;
     public $param1;
     public $param2;
     public $param3;
     
-    public function BorrarEmpleado() {
+    public function BorrarLog() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
             delete
-            from empleados
+            from logs
             WHERE id=$this->id");
         $consulta->execute();
         return $consulta->rowCount();
     }
 
-    public function ModificarEmpleado() {
+    public function ModificarLog() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
-            update empleados 
+            update logs 
             set param1='$this->param1',
             param2='$this->param2',
             param3='$this->param3'
@@ -27,34 +27,34 @@ class Empleado
         return $consulta->execute();
     }
 
-    public function InsertarEmpleado() {
+    public function InsertarLog() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into empleados (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into logs (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
 
-    public function GuardarEmpleado() {
+    public function GuardarLog() {
         if ($this->id > 0) {
-            $this->ModificarEmpleado();
+            $this->ModificarLog();
         } else {
-            $this->InsertarEmpleado();
+            $this->InsertarLog();
         }
     }
 
-    public static function TraerEmpleados() {
+    public static function TraerLogs() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from empleados");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from logs");
         $consulta->execute();
-        return $consulta->fetchAll(PDO::FETCH_CLASS, "Empleado");
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "Log");
     }
 
-    public static function TraerEmpleado($id) {
+    public static function TraerLog($id) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from empleados where id = $id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from logs where id = $id");
         $consulta->execute();
-        $empleadoResultado= $consulta->fetchObject('Empleado');
-        return $empleadoResultado;
+        $logResultado= $consulta->fetchObject('Log');
+        return $logResultado;
     }
 
     public function toString() {

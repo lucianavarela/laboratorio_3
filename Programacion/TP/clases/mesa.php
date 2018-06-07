@@ -1,25 +1,25 @@
 <?php
-class Empleado
+class Mesa
 {
     public $id;
     public $param1;
     public $param2;
     public $param3;
     
-    public function BorrarEmpleado() {
+    public function BorrarMesa() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
             delete
-            from empleados
+            from mesas
             WHERE id=$this->id");
         $consulta->execute();
         return $consulta->rowCount();
     }
 
-    public function ModificarEmpleado() {
+    public function ModificarMesa() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
-            update empleados 
+            update mesas 
             set param1='$this->param1',
             param2='$this->param2',
             param3='$this->param3'
@@ -27,34 +27,34 @@ class Empleado
         return $consulta->execute();
     }
 
-    public function InsertarEmpleado() {
+    public function InsertarMesa() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into empleados (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into mesas (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
 
-    public function GuardarEmpleado() {
+    public function GuardarMesa() {
         if ($this->id > 0) {
-            $this->ModificarEmpleado();
+            $this->ModificarMesa();
         } else {
-            $this->InsertarEmpleado();
+            $this->InsertarMesa();
         }
     }
 
-    public static function TraerEmpleados() {
+    public static function TraerMesas() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from empleados");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from mesas");
         $consulta->execute();
-        return $consulta->fetchAll(PDO::FETCH_CLASS, "Empleado");
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "Mesa");
     }
 
-    public static function TraerEmpleado($id) {
+    public static function TraerMesa($id) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from empleados where id = $id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from mesas where id = $id");
         $consulta->execute();
-        $empleadoResultado= $consulta->fetchObject('Empleado');
-        return $empleadoResultado;
+        $mesaResultado= $consulta->fetchObject('Mesa');
+        return $mesaResultado;
     }
 
     public function toString() {

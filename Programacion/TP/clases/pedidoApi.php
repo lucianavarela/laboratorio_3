@@ -1,17 +1,17 @@
 <?php
 require_once 'pedido.php';
 require_once 'IApiUsable.php';
-class pedidoApi extends pedido implements IApiUsable
+class pedidoApi extends Pedido implements IApiUsable
 {
 	public function TraerUno($request, $response, $args) {
 		$id=$args['id'];
-		$pedidoObj=pedido::TraerPedido($id);
+		$pedidoObj=Pedido::TraerPedido($id);
 		$newResponse = $response->withJson($pedidoObj, 200);  
 		return $newResponse;
 	}
 
 	public function TraerTodos($request, $response, $args) {
-		$pedidos=pedido::TraerPedidos();
+		$pedidos=Pedido::TraerPedidos();
 		$newResponse = $response->withJson($pedidos, 200);  
 		return $newResponse;
 	}
@@ -21,11 +21,11 @@ class pedidoApi extends pedido implements IApiUsable
 		$param1= $ArrayDeParametros['param1'];
 		$param2= $ArrayDeParametros['param2'];
 		$param3= $ArrayDeParametros['param3'];
-		$mipedido = new pedido();
+		$mipedido = new Pedido();
 		$mipedido->param1=$param1;
 		$mipedido->param2=$param2;
 		$mipedido->param3=$param3;
-		$mipedido->InsertarPedidoParametros();
+		$mipedido->InsertarPedido();
 		$archivos = $request->getUploadedFiles();
 		$destino="./fotos/";
 		$nombreAnterior=$archivos['foto']->getClientFilename();
@@ -39,7 +39,7 @@ class pedidoApi extends pedido implements IApiUsable
 	public function BorrarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
 		$id=$ArrayDeParametros['id'];
-		$pedido= new pedido();
+		$pedido= new Pedido();
 		$pedido->id=$id;
 		$cantidadDeBorrados=$pedido->BorrarPedido();
 		$objDelaRespuesta= new stdclass();
@@ -60,12 +60,12 @@ class pedidoApi extends pedido implements IApiUsable
 		//$response->getBody()->write("<h1>Modificar  uno</h1>");
 		$ArrayDeParametros = $request->getParsedBody();
 		//var_dump($ArrayDeParametros);    	
-		$mipedido = new pedido();
+		$mipedido = new Pedido();
 		$mipedido->id=$ArrayDeParametros['id'];
 		$mipedido->param1=$ArrayDeParametros['param1'];
 		$mipedido->param2=$ArrayDeParametros['param2'];
 		$mipedido->param3=$ArrayDeParametros['param3'];
-		$resultado =$mipedido->ModificarPedidoParametros();
+		$resultado =$mipedido->ModificarPedido();
 		$objDelaRespuesta= new stdclass();
 		//var_dump($resultado);
 		$objDelaRespuesta->resultado=$resultado;

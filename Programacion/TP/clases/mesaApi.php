@@ -1,18 +1,18 @@
 <?php
-require_once 'socio.php';
+require_once 'mesa.php';
 require_once 'IApiUsable.php';
-class socioApi extends Socio implements IApiUsable
+class mesaApi extends Mesa implements IApiUsable
 {
 	public function TraerUno($request, $response, $args) {
 		$id=$args['id'];
-		$socioObj=Socio::TraerSocio($id);
-		$newResponse = $response->withJson($socioObj, 200);  
+		$mesaObj=Mesa::TraerMesa($id);
+		$newResponse = $response->withJson($mesaObj, 200);  
 		return $newResponse;
 	}
 
 	public function TraerTodos($request, $response, $args) {
-		$socios=Socio::TraerSocios();
-		$newResponse = $response->withJson($socios, 200);  
+		$mesas=Mesa::TraerMesas();
+		$newResponse = $response->withJson($mesas, 200);  
 		return $newResponse;
 	}
 
@@ -21,27 +21,27 @@ class socioApi extends Socio implements IApiUsable
 		$param1= $ArrayDeParametros['param1'];
 		$param2= $ArrayDeParametros['param2'];
 		$param3= $ArrayDeParametros['param3'];
-		$misocio = new Socio();
-		$misocio->param1=$param1;
-		$misocio->param2=$param2;
-		$misocio->param3=$param3;
-		$misocio->InsertarSocio();
+		$mimesa = new Mesa();
+		$mimesa->param1=$param1;
+		$mimesa->param2=$param2;
+		$mimesa->param3=$param3;
+		$mimesa->InsertarMesa();
 		$archivos = $request->getUploadedFiles();
 		$destino="./fotos/";
 		$nombreAnterior=$archivos['foto']->getClientFilename();
 		$extension= explode(".", $nombreAnterior)  ;
 		$extension=array_reverse($extension);
 		$archivos['foto']->moveTo($destino.$param1.".".$extension[0]);
-		$response->getBody()->write("se guardo el socio");
+		$response->getBody()->write("se guardo el mesa");
 		return $response;
 	}
 
 	public function BorrarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
 		$id=$ArrayDeParametros['id'];
-		$socio= new Socio();
-		$socio->id=$id;
-		$cantidadDeBorrados=$socio->BorrarSocio();
+		$mesa= new Mesa();
+		$mesa->id=$id;
+		$cantidadDeBorrados=$mesa->BorrarMesa();
 		$objDelaRespuesta= new stdclass();
 		$objDelaRespuesta->cantidad=$cantidadDeBorrados;
 		if($cantidadDeBorrados>0)
@@ -60,12 +60,12 @@ class socioApi extends Socio implements IApiUsable
 		//$response->getBody()->write("<h1>Modificar  uno</h1>");
 		$ArrayDeParametros = $request->getParsedBody();
 		//var_dump($ArrayDeParametros);    	
-		$misocio = new Socio();
-		$misocio->id=$ArrayDeParametros['id'];
-		$misocio->param1=$ArrayDeParametros['param1'];
-		$misocio->param2=$ArrayDeParametros['param2'];
-		$misocio->param3=$ArrayDeParametros['param3'];
-		$resultado =$misocio->ModificarSocio();
+		$mimesa = new Mesa();
+		$mimesa->id=$ArrayDeParametros['id'];
+		$mimesa->param1=$ArrayDeParametros['param1'];
+		$mimesa->param2=$ArrayDeParametros['param2'];
+		$mimesa->param3=$ArrayDeParametros['param3'];
+		$resultado =$mimesa->ModificarMesa();
 		$objDelaRespuesta= new stdclass();
 		//var_dump($resultado);
 		$objDelaRespuesta->resultado=$resultado;

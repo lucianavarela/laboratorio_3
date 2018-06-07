@@ -1,17 +1,17 @@
 <?php
 require_once 'empleado.php';
 require_once 'IApiUsable.php';
-class empleadoApi extends empleado implements IApiUsable
+class empleadoApi extends Empleado implements IApiUsable
 {
 	public function TraerUno($request, $response, $args) {
 		$id=$args['id'];
-		$empleadoObj=empleado::TraerEmpleado($id);
+		$empleadoObj=Empleado::TraerEmpleado($id);
 		$newResponse = $response->withJson($empleadoObj, 200);  
 		return $newResponse;
 	}
 
 	public function TraerTodos($request, $response, $args) {
-		$empleados=empleado::TraerEmpleados();
+		$empleados=Empleado::TraerEmpleados();
 		$newResponse = $response->withJson($empleados, 200);  
 		return $newResponse;
 	}
@@ -21,11 +21,11 @@ class empleadoApi extends empleado implements IApiUsable
 		$param1= $ArrayDeParametros['param1'];
 		$param2= $ArrayDeParametros['param2'];
 		$param3= $ArrayDeParametros['param3'];
-		$miempleado = new empleado();
+		$miempleado = new Empleado();
 		$miempleado->param1=$param1;
 		$miempleado->param2=$param2;
 		$miempleado->param3=$param3;
-		$miempleado->InsertarEmpleadoParametros();
+		$miempleado->InsertarEmpleado();
 		$archivos = $request->getUploadedFiles();
 		$destino="./fotos/";
 		$nombreAnterior=$archivos['foto']->getClientFilename();
@@ -39,7 +39,7 @@ class empleadoApi extends empleado implements IApiUsable
 	public function BorrarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
 		$id=$ArrayDeParametros['id'];
-		$empleado= new empleado();
+		$empleado= new Empleado();
 		$empleado->id=$id;
 		$cantidadDeBorrados=$empleado->BorrarEmpleado();
 		$objDelaRespuesta= new stdclass();
@@ -60,12 +60,12 @@ class empleadoApi extends empleado implements IApiUsable
 		//$response->getBody()->write("<h1>Modificar  uno</h1>");
 		$ArrayDeParametros = $request->getParsedBody();
 		//var_dump($ArrayDeParametros);    	
-		$miempleado = new empleado();
+		$miempleado = new Empleado();
 		$miempleado->id=$ArrayDeParametros['id'];
 		$miempleado->param1=$ArrayDeParametros['param1'];
 		$miempleado->param2=$ArrayDeParametros['param2'];
 		$miempleado->param3=$ArrayDeParametros['param3'];
-		$resultado =$miempleado->ModificarEmpleadoParametros();
+		$resultado =$miempleado->ModificarEmpleado();
 		$objDelaRespuesta= new stdclass();
 		//var_dump($resultado);
 		$objDelaRespuesta->resultado=$resultado;
