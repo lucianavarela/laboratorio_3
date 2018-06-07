@@ -1,10 +1,30 @@
 <?php
 class Log
 {
-    public $id;
-    public $param1;
-    public $param2;
-    public $param3;
+    private $id;
+    private $param1;
+    private $param2;
+    private $param3;
+    
+    public function GetParam1() {
+        return $this->param1;
+    }
+    public function GetParam2() {
+        return $this->param2;
+    }
+    public function GetParam3() {
+        return $this->param3;
+    }
+
+    public function SetParam1($value) {
+        $this->param1 = $value;
+    }
+    public function SetParam2($value) {
+        $this->param2 = $value;
+    }
+    public function SetParam3($value) {
+        $this->param3 = $value;
+    }
     
     public function BorrarLog() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
