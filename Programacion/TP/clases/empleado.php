@@ -2,28 +2,41 @@
 class Empleado
 {
     private $id;
-    private $param1;
-    private $param2;
-    private $param3;
+    private $email;
+    private $clave;
+    private $tipo;
+    private $estado;
     
-    public function GetParam1() {
-        return $this->param1;
+    public function GetEmail() {
+        return $this->email;
     }
-    public function GetParam2() {
-        return $this->param2;
+    public function GetClave() {
+        return $this->clave;
     }
-    public function GetParam3() {
-        return $this->param3;
+    public function GetTipo() {
+        return $this->tipo;
+    }
+    public function GetEstado() {
+        return $this->estado;
     }
 
-    public function SetParam1($value) {
-        $this->param1 = $value;
+    public function SetEmail($value) {
+        $this->email = $value;
     }
-    public function SetParam2($value) {
-        $this->param2 = $value;
+    public function SetClave($value) {
+        $this->clave = $value;
     }
-    public function SetParam3($value) {
-        $this->param3 = $value;
+    public function SetTipo($value) {
+        $this->tipo = $value;
+    }
+    public function SetEstado($value) {
+        $estados = array("activo", "suspendido", "inactivo");
+        if (in_array($value, $estados)) {
+            $this->estado = $value;
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public function BorrarEmpleado() {
@@ -40,16 +53,16 @@ class Empleado
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
             update empleados 
-            set param1='$this->param1',
-            param2='$this->param2',
-            param3='$this->param3'
+            set email='$this->email',
+            clave='$this->clave',
+            tipo='$this->tipo'
             WHERE id=$this->id");
         return $consulta->execute();
     }
 
     public function InsertarEmpleado() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into empleados (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into empleados (email,clave,tipo)values('$this->email','$this->clave','$this->tipo')");
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
@@ -64,20 +77,20 @@ class Empleado
 
     public static function TraerEmpleados() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from empleados");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id,email as email, clave as clave,tipo as tipo from empleados");
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, "Empleado");
     }
 
     public static function TraerEmpleado($id) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from empleados where id = $id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select id, email as email, clave as clave,tipo as tipo from empleados where id = $id");
         $consulta->execute();
         $empleadoResultado= $consulta->fetchObject('Empleado');
         return $empleadoResultado;
     }
 
     public function toString() {
-        return "Metodo mostar:".$this->param1."  ".$this->param2."  ".$this->param3;
+        return "Metodo mostar:".$this->email."  ".$this->clave."  ".$this->tipo;
     }
 }

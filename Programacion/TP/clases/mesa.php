@@ -2,28 +2,27 @@
 class Mesa
 {
     private $id;
-    private $param1;
-    private $param2;
-    private $param3;
+    private $codigo;
+    private $estado;
     
-    public function GetParam1() {
-        return $this->param1;
+    public function GetCodigo() {
+        return $this->codigo;
     }
-    public function GetParam2() {
-        return $this->param2;
-    }
-    public function GetParam3() {
-        return $this->param3;
+    public function GetEstado() {
+        return ucwords($this->estado);
     }
 
-    public function SetParam1($value) {
-        $this->param1 = $value;
+    public function SetCodigo($value) {
+        $this->codigo = $value;
     }
-    public function SetParam2($value) {
-        $this->param2 = $value;
-    }
-    public function SetParam3($value) {
-        $this->param3 = $value;
+    public function SetEstado($value) {
+        $estados = array("con cliente esperando pedido", "con cliente comiendo", "con cliente pagando", "cerrada");
+        if (in_array($value, $estados)) {
+            $this->estado = $value;
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public function BorrarMesa() {
@@ -40,18 +39,18 @@ class Mesa
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
             update mesas 
-            set param1='$this->param1',
-            param2='$this->param2',
-            param3='$this->param3'
+            set codigo='$this->codigo',
+            estado='$this->estado'
             WHERE id=$this->id");
         return $consulta->execute();
     }
 
     public function InsertarMesa() {
+        $nuevoCodigo = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 5);
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into mesas (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into mesas (codigo,estado)values('$nuevoCodigo','$this->estado')");
         $consulta->execute();
-        return $objetoAccesoDato->RetornarUltimoIdInsertado();
+        return $nuevoCodigo;
     }
 
     public function GuardarMesa() {
@@ -64,20 +63,27 @@ class Mesa
 
     public static function TraerMesas() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from mesas");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from mesas");
         $consulta->execute();
-        return $consulta->fetchAll(PDO::FETCH_CLASS, "Mesa");
+        $mesas = $consulta->fetchAll(PDO::FETCH_CLASS, "Mesa");
+        foreach($mesas as $mesa) {
+            echo $mesa->toString();
+        }
+        return $mesas;
     }
 
     public static function TraerMesa($id) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from mesas where id = $id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from mesas where codigo = '$id'");
         $consulta->execute();
         $mesaResultado= $consulta->fetchObject('Mesa');
+        if ($mesaResultado) {
+            //echo $mesaResultado->toString();
+        }
         return $mesaResultado;
     }
 
     public function toString() {
-        return "Metodo mostar:".$this->param1."  ".$this->param2."  ".$this->param3;
+        return "\nMesa #$this->codigo -> ".$this->GetEstado();
     }
 }

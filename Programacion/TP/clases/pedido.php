@@ -1,16 +1,16 @@
 <?php
 class Pedido
 {
-    private $id;
-    private $nombreCliente;
-    private $codigo;
-    private $estado;
-    private $importe;
-    private $idMesa;
-    private $foto;
-    private $fechaIngresado;
-    private $fechaEstimado;
-    private $fechaEntregado;
+    protected $id;
+    protected $nombreCliente;
+    protected $codigo;
+    protected $estado;
+    protected $importe;
+    protected $idMesa;
+    protected $foto;
+    protected $fechaIngresado;
+    protected $fechaEstimado;
+    protected $fechaEntregado;
     
     public function GetNombreCliente() {
         return $this->nombreCliente;
@@ -19,7 +19,7 @@ class Pedido
         return $this->codigo;
     }
     public function GetEstado() {
-        return $this->estado;
+        return ucwords($this->estado);
     }
     public function GetImporte() {
         return $this->importe;
@@ -61,7 +61,7 @@ class Pedido
         }
     }
     public function SetImporte($value) {
-        if (is_float($value)) {
+        if (is_numeric($value)) {
             $this->importe = (float)$value;
             return true;
         } else {
@@ -69,12 +69,7 @@ class Pedido
         }
     }
     public function SetIdMesa($value) {
-        if (is_int($value)) {
-            $this->idMesa = (int)$value;
-            return true;
-        } else {
-            return false;
-        }
+        $this->idMesa = $value;
     }
     public function SetFoto($value) {
         $this->foto = $value;
@@ -89,22 +84,31 @@ class Pedido
         $this->fechaEntregado = $value;
     }
 
+    public function __construct(){}
+    
     public function InsertarPedido() {
-        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into pedidos (nombreCliente,codigo,estado,importe,idMesa,foto,fechaIngresado,fechaEstimado,fechaEntregado)
-            values(
-            '$this->nombreCliente',
-            '$this->codigo',
-            '$this->estado',
-            '$this->importe',
-            $this->idMesa,
-            '$this->foto',
-            '$this->fechaIngresado',
-            '$this->fechaEstimado',
-            '$this->fechaEntregado'
-            );");
-        $consulta->execute();
-        return $objetoAccesoDato->RetornarUltimoIdInsertado();
+        $nuevoCodigo = substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, 5);
+        if ($this->foto !== NULL) {
+            $this->foto = $nuevoCodigo.'.'.$this->foto;
+        }
+        $mesa = Mesa::TraerMesa($this->idMesa);
+        if ($mesa && $mesa->GetEstado() == 'Cerrada') {
+            $mesa->SetEstado('con cliente esperando pedido');
+            $mesa->GuardarMesa();
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+            $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into pedidos (nombreCliente,codigo,estado,idMesa,foto)
+                values(
+                '$this->nombreCliente',
+                '$nuevoCodigo',
+                '$this->estado',
+                '$this->idMesa',
+                '$this->foto'
+                );");
+            $consulta->execute();
+            return $nuevoCodigo;
+        } else {
+            return NULL;
+        }
     }
 
     public function ModificarPedido() {
@@ -115,7 +119,7 @@ class Pedido
             codigo='$this->codigo',
             estado='$this->estado',
             importe='$this->importe',
-            idMesa=$this->idMesa,
+            idMesa='$this->idMesa',
             foto='$this->foto',
             fechaIngresado='$this->fechaIngresado',
             fechaEstimado='$this->fechaEstimado',
@@ -128,7 +132,8 @@ class Pedido
         if ($this->id > 0) {
             $this->ModificarPedido();
         } else {
-            $this->InsertarPedido();
+            $codigo = $this->InsertarPedido();
+            return $codigo;
         }
     }
 
@@ -146,18 +151,27 @@ class Pedido
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta =$objetoAccesoDato->RetornarConsulta("select * from pedidos;");
         $consulta->execute();
-        return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
+        $pedidos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
+        foreach($pedidos as $pedido) {
+            echo $pedido->toString();
+        }
+        return $pedidos;
     }
 
-    public static function TraerPedido($id) {
+    public static function TraerPedido($codigoPedido, $codigoMesa) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select * from pedidos where id = $id;");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from pedidos where codigo = '$codigoPedido' and idMesa = '$codigoMesa';");
         $consulta->execute();
         $pedidoResultado= $consulta->fetchObject('Pedido');
+        if ($pedidoResultado) {
+            echo "Estado de su pedido: ".($pedidoResultado->GetEstado());
+        } else {
+            echo "Pedido incorrecto";
+        }
         return $pedidoResultado;
     }
 
     public function toString() {
-        return "Pedido #$this->codigo: $this->nombreCliente (Mesa $this->estado)";
+        return "\nPedido #$this->codigo: $this->nombreCliente (Mesa #$this->idMesa) -> ".$this->GetEstado();
     }
 }

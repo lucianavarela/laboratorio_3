@@ -1,32 +1,31 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-require '../composer/vendor/autoload.php';
-require '/clases/AccesoDatos.php';
-require '/clases/IApiUsable.php';
-require '/clases/pedido.php';
-require '/clases/pedidoApi.php';
-require '/clases/empleado.php';
-require '/clases/empleadoApi.php';
-require '/clases/mozo.php';
-require '/clases/mozoApi.php';
-require '/clases/socio.php';
-require '/clases/socioApi.php';
-require '/clases/mesa.php';
-require '/clases/mesaApi.php';
-require '/clases/encuesta.php';
-require '/clases/encuestaApi.php';
-require '/clases/log.php';
-require '/clases/logApi.php';
+require_once '/composer/vendor/autoload.php';
+require_once '/clases/AccesoDatos.php';
+require_once '/clases/IApiUsable.php';
+require_once '/clases/mesa.php';
+require_once '/clases/mesaApi.php';
+require_once '/clases/pedido.php';
+require_once '/clases/pedidoApi.php';
+require_once '/clases/empleado.php';
+require_once '/clases/empleadoApi.php';
+require_once '/clases/socio.php';
+require_once '/clases/socioApi.php';
+require_once '/clases/encuesta.php';
+require_once '/clases/encuestaApi.php';
+require_once '/clases/log.php';
+require_once '/clases/logApi.php';
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
 
 $app = new \Slim\App(["settings" => $config]);
-/*LLAMADA A METODOS DE INSTANCIA DE UNA CLASE*/
+
 $app->group('/pedido', function () {
   $this->get('/', \pedidoApi::class . ':traerTodos');
-  $this->get('/{id}#{id}', \pedidoApi::class . ':traerUno');
+  $this->get('/{codigoMesa}/{codigoPedido}', \pedidoApi::class . ':traerUno');
   $this->post('/', \pedidoApi::class . ':CargarUno');
+  $this->post('/cancelar/{id}', \pedidoApi::class . ':Cancelar');
   $this->delete('/', \pedidoApi::class . ':BorrarUno');
   $this->put('/', \pedidoApi::class . ':ModificarUno');
 });

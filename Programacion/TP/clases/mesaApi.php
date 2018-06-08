@@ -18,21 +18,10 @@ class mesaApi extends Mesa implements IApiUsable
 
 	public function CargarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
-		$param1= $ArrayDeParametros['param1'];
-		$param2= $ArrayDeParametros['param2'];
-		$param3= $ArrayDeParametros['param3'];
 		$mimesa = new Mesa();
-		$mimesa->param1=$param1;
-		$mimesa->param2=$param2;
-		$mimesa->param3=$param3;
-		$mimesa->InsertarMesa();
-		$archivos = $request->getUploadedFiles();
-		$destino="./fotos/";
-		$nombreAnterior=$archivos['foto']->getClientFilename();
-		$extension= explode(".", $nombreAnterior)  ;
-		$extension=array_reverse($extension);
-		$archivos['foto']->moveTo($destino.$param1.".".$extension[0]);
-		$response->getBody()->write("se guardo el mesa");
+		$mimesa->SetEstado('cerrada');
+		$codigo = $mimesa->InsertarMesa();
+		$response->getBody()->write("Se ha ingresado la mesa #$codigo");
 		return $response;
 	}
 
@@ -59,12 +48,10 @@ class mesaApi extends Mesa implements IApiUsable
 	public function ModificarUno($request, $response, $args) {
 		//$response->getBody()->write("<h1>Modificar  uno</h1>");
 		$ArrayDeParametros = $request->getParsedBody();
-		//var_dump($ArrayDeParametros);    	
 		$mimesa = new Mesa();
 		$mimesa->id=$ArrayDeParametros['id'];
-		$mimesa->param1=$ArrayDeParametros['param1'];
-		$mimesa->param2=$ArrayDeParametros['param2'];
-		$mimesa->param3=$ArrayDeParametros['param3'];
+		$mimesa->param1=$ArrayDeParametros['codigo'];
+		$mimesa->param2=$ArrayDeParametros['estado'];
 		$resultado =$mimesa->ModificarMesa();
 		$objDelaRespuesta= new stdclass();
 		//var_dump($resultado);
