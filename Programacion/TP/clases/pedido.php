@@ -123,6 +123,20 @@ class Pedido
         return $pedidoResultado;
     }
 
+    public static function TraerPedidosPendientes($sector) {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta =$objetoAccesoDato->RetornarConsulta(
+            "SELECT p.id, p.sector, p.idEmpleado, p.descripcion, p.terminado, p.idComanda
+            FROM pedidos p
+            INNER JOIN comandas c
+            ON p.idComanda = c.codigo
+            WHERE c.estado = 'pendiente'
+            AND p.sector = '$sector'"
+        );
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
+    }
+
     public function toString() {
         return "Metodo mostar:".$this->sector."  ".$this->idEmpleado."  ".$this->descripcion;
     }

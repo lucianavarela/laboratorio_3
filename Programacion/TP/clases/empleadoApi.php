@@ -16,6 +16,17 @@ class empleadoApi extends Empleado implements IApiUsable
 		return $newResponse;
 	}
 
+	public function TomarPedido($request, $response, $args) {
+		$ArrayDeParametros = $request->getParsedBody();
+		if ($ArrayDeParametros['id'] && $ArrayDeParametros['pedido'] && $ArrayDeParametros['estimacion']) {
+			$respuesta=Empleado::TomarPedido($ArrayDeParametros['id'], $ArrayDeParametros['pedido'], $ArrayDeParametros['estimacion']);
+			$response->getBody()->write($respuesta);
+			return $response;
+		}
+		$response->getBody()->write('Debe ingresar el id del empleado y el numero del pedido');
+		return $response;
+	}
+
 	public function CargarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
 		$param1= $ArrayDeParametros['param1'];

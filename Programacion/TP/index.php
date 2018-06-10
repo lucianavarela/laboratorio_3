@@ -59,6 +59,14 @@ $app->group('/mesa', function () {
   $this->delete('/', \mesaApi::class . ':BorrarUno');
   $this->put('/', \mesaApi::class . ':ModificarUno');
 });
+$app->group('/pedido', function () {
+  $this->get('/', \pedidoApi::class . ':traerTodos');
+  $this->get('/{id}', \pedidoApi::class . ':traerUno');
+  $this->get('/pendientes?{sector}', \pedidoApi::class . ':traerPendientesSector');
+  $this->post('/', \pedidoApi::class . ':CargarUno');
+  $this->delete('/', \pedidoApi::class . ':BorrarUno');
+  $this->put('/', \pedidoApi::class . ':ModificarUno');
+});
 $app->group('/encuesta', function () {
   $this->get('/', \encuestaApi::class . ':traerTodos');
   $this->get('/{id}', \encuestaApi::class . ':traerUno');

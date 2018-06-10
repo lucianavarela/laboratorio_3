@@ -16,6 +16,13 @@ class pedidoApi extends Pedido implements IApiUsable
 		return $newResponse;
 	}
 
+	public function traerPendientesSector($request, $response, $args) {
+		$sector=$args['sector'];
+		$pedidos=Pedido::TraerPedidosPendientes($sector);
+		$newResponse = $response->withJson($pedidos, 200);  
+		return $newResponse;
+	}
+
 	public function CargarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
 		$sector= $ArrayDeParametros['sector'];
