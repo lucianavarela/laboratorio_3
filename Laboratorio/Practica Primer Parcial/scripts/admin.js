@@ -1,10 +1,12 @@
 var xhr;
 var datos = new Array();
 var postAModificar = null;
+var request;
+var articulos;
 
-window.onload = function(){
+window.onload = function() {
     cargarDatos();
-};
+}
 
 function getPost (id) {
     if (datos.length > 0) {
@@ -23,6 +25,7 @@ function cargarDatos(){
            var resp = JSON.parse(this.response);
            datos = resp.data;
            refrescarTabla(resp.data);
+           popularBarraNavegadora();
         }
     };
     xhr.open("POST","http://localhost:3000/traer",true);
@@ -36,7 +39,7 @@ function refrescarTabla(data) {
     if (url.indexOf('admin') == -1) {
         for (i in data) {
             if (data[i].active) {
-                table_content += "<article><h2>"+data[i].titulo+"</h2><img src='img/imagen_1.jpg' alt='Imagen'><p>"+data[i].articulo+
+                table_content += "<article><h2 id="+data[i].id+">"+data[i].titulo+"</h2><img src='img/imagen_1.jpg' alt='Imagen'><p>"+data[i].articulo+
                 "</p><input type=button href='#' class='boton' value='LEER MÁS'/></article>";
             }
         }
@@ -121,4 +124,19 @@ function guardarPost() {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(data));
     }
+}
+
+function popularBarraNavegadora() {
+    var html_articles = '';
+    if (Object.keys(datos).length) {
+        for (i in datos) {
+            if (datos[i].active) {
+                html_articles += '<li><a href="/#'+ datos[i].id +'">'+ datos[i].titulo +'</a></li>';
+            }
+        }
+    }
+    if (html_articles == '') {
+        html_articles += '<li><a href="/admin.html"><b>Carge Articulos Aqui!</b></a></li>';
+    }
+    document.getElementsByTagName('aside')[0].getElementsByTagName('ul')[0].innerHTML = html_articles;
 }

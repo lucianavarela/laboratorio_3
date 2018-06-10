@@ -94,6 +94,7 @@ article img {
 .boton {
     font-size: 15px;
     border: none;
+    cursor: pointer;
     padding: 5px 15px;
     box-sizing: border-box;
     background-color: #00b6cd;
@@ -224,4 +225,15 @@ footer p {
 #loading img {
     position: relative;
     top: 250px;
+}
+
+.is-70-box {
+    width: 70% !important;
+    border: 1px solid #be0081;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+.is-70-box.boton{
+    background-color: #be0081!important;
 }

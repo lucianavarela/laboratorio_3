@@ -8,6 +8,8 @@ require_once '/clases/mesa.php';
 require_once '/clases/mesaApi.php';
 require_once '/clases/pedido.php';
 require_once '/clases/pedidoApi.php';
+require_once '/clases/comanda.php';
+require_once '/clases/comandaApi.php';
 require_once '/clases/empleado.php';
 require_once '/clases/empleadoApi.php';
 require_once '/clases/socio.php';
@@ -21,13 +23,13 @@ $config['addContentLengthHeader'] = false;
 
 $app = new \Slim\App(["settings" => $config]);
 
-$app->group('/pedido', function () {
-  $this->get('/', \pedidoApi::class . ':traerTodos');
-  $this->get('/{codigoMesa}/{codigoPedido}', \pedidoApi::class . ':traerUno');
-  $this->post('/', \pedidoApi::class . ':CargarUno');
-  $this->post('/cancelar/{id}', \pedidoApi::class . ':Cancelar');
-  $this->delete('/', \pedidoApi::class . ':BorrarUno');
-  $this->put('/', \pedidoApi::class . ':ModificarUno');
+$app->group('/comanda', function () {
+  $this->get('/', \comandaApi::class . ':traerTodos');
+  $this->get('/{codigoMesa}/{codigoComanda}', \comandaApi::class . ':traerUno');
+  $this->post('/', \comandaApi::class . ':CargarUno');
+  $this->post('/cancelar/{id}', \comandaApi::class . ':Cancelar');
+  $this->delete('/', \comandaApi::class . ':BorrarUno');
+  $this->put('/', \comandaApi::class . ':ModificarUno');
 });
 $app->group('/empleado', function () {
   $this->get('/', \empleadoApi::class . ':traerTodos');

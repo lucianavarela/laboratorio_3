@@ -1,11 +1,11 @@
 <?php
 class Empleado
 {
-    private $id;
-    private $email;
-    private $clave;
-    private $tipo;
-    private $estado;
+    protected $id;
+    protected $email;
+    protected $clave;
+    protected $tipo;
+    protected $estado;
     
     public function GetEmail() {
         return $this->email;

@@ -1,9 +1,9 @@
 <?php
 class Mesa
 {
-    private $id;
-    private $codigo;
-    private $estado;
+    protected $id;
+    protected $codigo;
+    protected $estado;
     
     public function GetCodigo() {
         return $this->codigo;

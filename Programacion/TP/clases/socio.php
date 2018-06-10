@@ -1,10 +1,10 @@
 <?php
 class Socio
 {
-    private $id;
-    private $param1;
-    private $param2;
-    private $param3;
+    protected $id;
+    protected $param1;
+    protected $param2;
+    protected $param3;
     
     public function GetParam1() {
         return $this->param1;
