@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-06-2018 a las 03:28:15
+-- Tiempo de generación: 10-06-2018 a las 22:50:34
 -- Versión del servidor: 10.1.31-MariaDB
--- Versión de PHP: 5.6.35
+-- Versión de PHP: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,18 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `comanda`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `mesas`
---
-
-CREATE TABLE `mesas` (
-  `id` int(11) NOT NULL,
-  `codigo` varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
-  `estado` varchar(50) COLLATE utf8_spanish2_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -56,16 +44,28 @@ CREATE TABLE `comandas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comandas`
+-- Estructura de tabla para la tabla `mesas`
+--
+
+CREATE TABLE `mesas` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
+  `estado` varchar(50) COLLATE utf8_spanish2_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedidos`
 --
 
 CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
-  `sector` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
-  `descripcion` varchar(500) COLLATE utf8_spanish2_ci NOT NULL,
-  `idEmpleado` int DEFAULT NULL,
   `idComanda` varchar(5) COLLATE utf8_spanish2_ci NOT NULL,
-  `terminado` boolean DEFAULT NULL,
+  `sector` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
+  `idEmpleado` int(11) DEFAULT NULL,
+  `descripcion` varchar(500) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `terminado` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
@@ -73,15 +73,9 @@ CREATE TABLE `pedidos` (
 --
 
 --
--- Indices de la tabla `mesas`
+-- Indices de la tabla `pedidos`
 --
-ALTER TABLE `mesas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `comandas`
---
-ALTER TABLE `comandas`
+ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -89,16 +83,10 @@ ALTER TABLE `comandas`
 --
 
 --
--- AUTO_INCREMENT de la tabla `mesas`
+-- AUTO_INCREMENT de la tabla `pedidos`
 --
-ALTER TABLE `mesas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de la tabla `comandas`
---
-ALTER TABLE `comandas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+ALTER TABLE `pedidos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
