@@ -164,7 +164,11 @@ class Comanda
         $consulta->execute();
         $comandaResultado= $consulta->fetchObject('Comanda');
         if ($comandaResultado) {
-            echo "Estado de su comanda: ".($comandaResultado->GetEstado());
+            $pedidos = Pedido::TraerPedidosPorComanda($codigoComanda);
+            foreach($pedidos as $pedido) {
+
+            }
+            echo "Estado de su pedido: ".($comandaResultado->GetEstado());
         } else {
             echo "Comanda incorrecto";
         }

@@ -73,11 +73,11 @@ class Pedido
             $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['cerveza']);
             $pedido_nuevo->InsertarPedido();
         }
-        if (in_array('comida', $arrayComanda)) {
+        if (in_array('cocina', $arrayComanda)) {
             $pedido_nuevo = new Pedido();
-            $pedido_nuevo->sector = 'comida';
+            $pedido_nuevo->sector = 'cocina';
             $pedido_nuevo->idPedido = $comanda;
-            $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['comida']);
+            $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['cocina']);
             $pedido_nuevo->InsertarPedido();
         }
         if (in_array('candy', $arrayComanda)) {
@@ -132,6 +132,18 @@ class Pedido
             ON p.idComanda = c.codigo
             WHERE c.estado = 'pendiente'
             AND p.sector = '$sector'"
+        );
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
+    }
+
+
+    public static function TraerPedidosPorComanda($comanda) {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta =$objetoAccesoDato->RetornarConsulta(
+            "SELECT *
+            FROM pedidos
+            WHERE idComanda = '$comanda'"
         );
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
