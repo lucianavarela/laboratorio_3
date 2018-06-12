@@ -16,10 +16,21 @@ class empleadoApi extends Empleado implements IApiUsable
 		return $newResponse;
 	}
 
-	public function TomarPedido($request, $response, $args) {
+	public function TomarUnPedido($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
-		if ($ArrayDeParametros['id'] && $ArrayDeParametros['pedido'] && $ArrayDeParametros['estimacion']) {
-			$respuesta=Empleado::TomarPedido($ArrayDeParametros['id'], $ArrayDeParametros['pedido'], $ArrayDeParametros['estimacion']);
+		if ($ArrayDeParametros['idEmpleado'] && $ArrayDeParametros['idPedido'] && $ArrayDeParametros['estimacion']) {
+			$respuesta=Empleado::TomarPedido($ArrayDeParametros['idEmpleado'], $ArrayDeParametros['idPedido'], $ArrayDeParametros['estimacion']);
+			$response->getBody()->write($respuesta);
+			return $response;
+		}
+		$response->getBody()->write('Debe ingresar el id del empleado y el numero del pedido');
+		return $response;
+	}
+
+	public function EntregarUnPedido($request, $response, $args) {
+		$ArrayDeParametros = $request->getParsedBody();
+		if ($ArrayDeParametros['idPedido']) {
+			$respuesta=Empleado::EntregarPedido($ArrayDeParametros['idPedido']);
 			$response->getBody()->write($respuesta);
 			return $response;
 		}
@@ -29,21 +40,13 @@ class empleadoApi extends Empleado implements IApiUsable
 
 	public function CargarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
-		$param1= $ArrayDeParametros['param1'];
-		$param2= $ArrayDeParametros['param2'];
-		$param3= $ArrayDeParametros['param3'];
 		$miempleado = new Empleado();
-		$miempleado->param1=$param1;
-		$miempleado->param2=$param2;
-		$miempleado->param3=$param3;
+		$miempleado->email=$ArrayDeParametros['email'];
+		$miempleado->clave=$ArrayDeParametros['clave'];
+		$miempleado->sector=$ArrayDeParametros['sector'];
+		$miempleado->estado='activo';
 		$miempleado->InsertarEmpleado();
-		$archivos = $request->getUploadedFiles();
-		$destino="./fotos/";
-		$nombreAnterior=$archivos['foto']->getClientFilename();
-		$extension= explode(".", $nombreAnterior)  ;
-		$extension=array_reverse($extension);
-		$archivos['foto']->moveTo($destino.$param1.".".$extension[0]);
-		$response->getBody()->write("se guardo el empleado");
+		$response->getBody()->write("Se ingreso el empleado!");
 		return $response;
 	}
 
@@ -68,18 +71,14 @@ class empleadoApi extends Empleado implements IApiUsable
 	}
 		
 	public function ModificarUno($request, $response, $args) {
-		//$response->getBody()->write("<h1>Modificar  uno</h1>");
 		$ArrayDeParametros = $request->getParsedBody();
-		//var_dump($ArrayDeParametros);    	
 		$miempleado = new Empleado();
 		$miempleado->id=$ArrayDeParametros['id'];
-		$miempleado->param1=$ArrayDeParametros['param1'];
-		$miempleado->param2=$ArrayDeParametros['param2'];
-		$miempleado->param3=$ArrayDeParametros['param3'];
+		$miempleado->email=$ArrayDeParametros['email'];
+		$miempleado->clave=$ArrayDeParametros['clave'];
+		$miempleado->sector=$ArrayDeParametros['sector'];
+		$miempleado->estado=$ArrayDeParametros['estado'];
 		$resultado =$miempleado->ModificarEmpleado();
-		$objDelaRespuesta= new stdclass();
-		//var_dump($resultado);
-		$objDelaRespuesta->resultado=$resultado;
 		return $response->withJson($objDelaRespuesta, 200);		
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 class Empleado
 {
-    protected $id;
-    protected $email;
-    protected $clave;
-    protected $sector;
-    protected $estado;
+    public $id;
+    public $email;
+    public $clave;
+    public $sector;
+    public $estado;
     
     public function GetEmail() {
         return $this->email;
@@ -55,20 +55,23 @@ class Empleado
             update empleados 
             set email='$this->email',
             clave='$this->clave',
-            sector='$this->sector'
-            WHERE id=$this->id");
+            sector='$this->sector',
+            estado='$this->estado'
+            WHERE id=$this->id;");
         return $consulta->execute();
     }
 
     public function InsertarEmpleado() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into empleados (email,clave,sector)values('$this->email','$this->clave','$this->sector')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT
+        into empleados (email,clave,sector,estado)
+        values('$this->email','$this->clave','$this->sector','$this->estado')");
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
 
     public function GuardarEmpleado() {
-        if ($this->id > 0) {
+        if ($this->id >= 0) {
             $this->ModificarEmpleado();
         } else {
             $this->InsertarEmpleado();
@@ -77,26 +80,41 @@ class Empleado
 
     public static function TraerEmpleados() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id,email as email, clave as clave,sector as sector from empleados");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from empleados");
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, "Empleado");
     }
 
     public static function TraerEmpleado($id) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id, email as email, clave as clave,sector as sector from empleados where id = $id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from empleados where id = $id");
         $consulta->execute();
         $empleadoResultado= $consulta->fetchObject('Empleado');
         return $empleadoResultado;
     }
 
     public static function TomarPedido($id, $pedido, $tiempo) {
-        $empleado = Empleado::TraerEmpleado($id);
+        $empleado=Empleado::TraerEmpleado($id);
+        $empleado->estado = 'ocupado';
+        $empleado->GuardarEmpleado();
         $pedido = Pedido::TraerPedido($pedido);
         $pedido->SetIdEmpleado($empleado->id);
+        $pedido->estado = 'en preparación';
         $pedido->GuardarPedido();
         return "Se le ha asignado el pedido para la comanda #".$pedido->GetIdComanda().
         "\nDetalles del pedido: ".$pedido->GetDescripcion();
+    }
+
+    public static function EntregarPedido($id) {
+        $pedido = Pedido::TraerPedido($id);
+        $pedido->estado = 'listo para servir';
+        $pedido->GuardarPedido();
+        $comanda = Comanda::TraerComanda($pedido->idComanda);
+        $comanda->ValidarPedidos();
+        $empleado=Empleado::TraerEmpleado($pedido->idEmpleado);
+        $empleado->estado = 'activo';
+        $empleado->GuardarEmpleado();
+        return "Pedido #$id entregado.";
     }
 
     public function toString() {

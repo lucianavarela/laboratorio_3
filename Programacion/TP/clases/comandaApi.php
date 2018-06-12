@@ -5,8 +5,16 @@ class comandaApi extends Comanda implements IApiUsable
 	public function TraerUno($request, $response, $args) {
 		$codigoComanda=$args['codigoComanda'];
 		$codigoMesa=$args['codigoMesa'];
-		$comanda=Comanda::TraerComanda($codigoComanda, $codigoMesa);
-		$newResponse = $response->withJson($comanda, 200);  
+		$comanda=Comanda::TraerComanda($codigoComanda);
+		if ($comanda) {
+			if ($comanda->GetIdMesa() == $codigoMesa) {
+				$newResponse = $response->withJson($comanda, 200);  
+			} else {
+				$newResponse = $response->getBody()->write("Id de Mesa incorrecto para esta comanda.");
+			}
+		} else {
+			$newResponse = $response->getBody()->write("Comanda inexistente.");
+		}
 		return $newResponse;
 	}
 
@@ -22,7 +30,6 @@ class comandaApi extends Comanda implements IApiUsable
 		//Cargo la comanda
 		$micomanda = new Comanda();
 		$micomanda->SetNombreCliente($ArrayDeParametros['nombreCliente']);
-		$micomanda->SetEstado('pendiente');
 		$micomanda->SetIdMesa($ArrayDeParametros['idMesa']);
 		if (sizeof($archivos)) {
 			$destino="./fotos/";
@@ -78,7 +85,6 @@ class comandaApi extends Comanda implements IApiUsable
 		$micomanda->id=$ArrayDeParametros['id'];
 		$micomanda->nombreCliente=$ArrayDeParametros['nombreCliente'];
 		$micomanda->codigo=$ArrayDeParametros['codigo'];
-		$micomanda->estado=$ArrayDeParametros['estado'];
 		$micomanda->importe=$ArrayDeParametros['importe'];
 		$micomanda->idMesa=$ArrayDeParametros['idMesa'];
 		$micomanda->foto=$ArrayDeParametros['foto'];
