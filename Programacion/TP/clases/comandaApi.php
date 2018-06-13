@@ -2,6 +2,10 @@
 
 class comandaApi extends Comanda implements IApiUsable
 {
+	public function Saludo($request, $response, $args) {
+		$newResponse = $response->getBody()->write("Bienvenido!");
+	}
+
 	public function TraerUno($request, $response, $args) {
 		$codigoComanda=$args['codigoComanda'];
 		$codigoMesa=$args['codigoMesa'];

@@ -23,6 +23,7 @@ $config['addContentLengthHeader'] = false;
 
 $app = new \Slim\App(["settings" => $config]);
 
+$app->get('/', \comandaApi::class . ':Saludo');
 $app->group('/comanda', function () {
   $this->get('/', \comandaApi::class . ':TraerTodos');
   $this->get('/{codigoMesa}/{codigoComanda}', \comandaApi::class . ':TraerUno');
