@@ -172,4 +172,44 @@ av3.edad = 40;
 console.log(av3.mostrar());
 var av4 = new Avenger3("Aquaman", 30);
 console.log(av4.mostrar());
+// 17 --> Clases con atributos privados
+var Xmen = /** @class */ (function () {
+    function Xmen() {
+        this.nombre = "un xman";
+    }
+    Xmen.crearXmen = function () {
+        return new Xmen();
+    };
+    Xmen.nombre_de_clase = "Xman";
+    return Xmen;
+}());
+console.log('------------------17-----------------');
+console.log(Xmen.nombre_de_clase);
+console.log(Xmen.crearXmen().nombre);
+// 18 --> Constructor privado
+var Xmen2 = /** @class */ (function () {
+    function Xmen2(nombre) {
+        this._nombre = "";
+        this._nombre = nombre;
+    }
+    Xmen2.getInstance = function () {
+        if (!(this.instancia)) {
+            this.instancia = new Xmen2("Mi Xman2");
+        }
+        return this.instancia;
+    };
+    Object.defineProperty(Xmen2.prototype, "nombre", {
+        get: function () { return this._nombre; },
+        set: function (nombre) { this._nombre = nombre; },
+        enumerable: true,
+        configurable: true
+    });
+    return Xmen2;
+}());
+console.log('------------------18-----------------');
+var xman2 = Xmen2.getInstance();
+console.log(xman2.nombre);
+xman2.nombre = "Supergirl";
+var xman3 = Xmen2.getInstance();
+console.log(xman3.nombre);
 //# sourceMappingURL=app.js.map

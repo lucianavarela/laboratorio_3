@@ -199,3 +199,41 @@ av3.edad = 40;
 console.log(av3.mostrar());
 let av4:Avenger3 = new Avenger3("Aquaman", 30);
 console.log(av4.mostrar());
+
+// 17 --> Clases con atributos privados
+class Xmen {
+    static nombre_de_clase:string = "Xman";
+    static crearXmen() {
+        return new Xmen();
+    }
+    nombre:string="un xman";
+}
+
+console.log('------------------17-----------------');
+console.log(Xmen.nombre_de_clase);
+console.log(Xmen.crearXmen().nombre);
+
+// 18 --> Constructor privado
+
+class Xmen2 {
+    private static instancia:Xmen2;
+    private _nombre:string="";
+    private constructor(nombre:string) {
+        this._nombre = nombre;
+    }
+    static getInstance():Xmen2{
+        if(!(this.instancia)){
+            this.instancia = new Xmen2("Mi Xman2");
+        }
+        return this.instancia;
+    }
+    set nombre(nombre:string) {this._nombre = nombre;}
+    get nombre():string {return this._nombre;}
+}
+
+console.log('------------------18-----------------');
+let xman2:Xmen2 = Xmen2.getInstance();
+console.log(xman2.nombre);
+xman2.nombre = "Supergirl";
+let xman3:Xmen2 = Xmen2.getInstance();
+console.log(xman3.nombre);
