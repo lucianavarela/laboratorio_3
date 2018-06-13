@@ -131,4 +131,45 @@ m1.poderes.push("Teletransportacion");
 console.log('------------------13-----------------');
 console.log(av1);
 console.log(m1);
+var miFuncion;
+miFuncion = function (num1, num2) { return num1 + num2; };
+console.log('------------------14-----------------');
+console.log(miFuncion(2, 5));
+// 14 --> Clases
+var Avenger2 = /** @class */ (function () {
+    function Avenger2(nombre) {
+        this.nombre = "un avenger";
+        this.nombre = nombre;
+    }
+    return Avenger2;
+}());
+console.log('------------------15-----------------');
+var av2 = new Avenger2("Hulk");
+console.log(av2);
+// 16 --> Clases con atributos privados
+var Avenger3 = /** @class */ (function () {
+    function Avenger3(nombre, edad) {
+        var _this = this;
+        this.nombre = "un avenger";
+        this._edad = 0;
+        this.mostrar = function () { return _this.nombre + " y tiene " + _this.edad; };
+        this.nombre = nombre;
+        if (edad) {
+            this.edad = edad;
+        }
+    }
+    Object.defineProperty(Avenger3.prototype, "edad", {
+        get: function () { return this._edad; },
+        set: function (edad) { this._edad = edad; },
+        enumerable: true,
+        configurable: true
+    });
+    return Avenger3;
+}());
+console.log('------------------16-----------------');
+var av3 = new Avenger3("Batman");
+av3.edad = 40;
+console.log(av3.mostrar());
+var av4 = new Avenger3("Aquaman", 30);
+console.log(av4.mostrar());
 //# sourceMappingURL=app.js.map

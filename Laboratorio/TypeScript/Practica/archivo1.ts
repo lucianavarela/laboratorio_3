@@ -149,7 +149,6 @@ class Mutant implements IHeroe {
 
 let av1:Avenger = new Avenger();
 av1.nombre="Superman";
-
 let m1:Mutant = new Mutant();
 m1.nombre="Legion";
 m1.poderes.push("Telequinesis");
@@ -158,3 +157,45 @@ console.log('------------------13-----------------');
 console.log(av1);
 console.log(m1);
 
+// 14 --> Interface en funciones
+interface IfuncDosNumeros {
+    (num1:number, num2:number):number;
+}
+let miFuncion:IfuncDosNumeros;
+miFuncion = (num1:number, num2:number)=>num1+num2;
+console.log('------------------14-----------------');
+console.log(miFuncion(2,5));
+
+// 14 --> Clases
+class Avenger2 implements IHeroe {
+    nombre:string="un avenger";
+    constructor(nombre:string) {
+        this.nombre = nombre;
+    }
+}
+
+console.log('------------------15-----------------');
+let av2:Avenger2 = new Avenger2("Hulk");
+console.log(av2);
+
+// 16 --> Clases con atributos privados
+class Avenger3 {
+    private nombre:string="un avenger";
+    private _edad:number=0;
+    constructor(nombre:string, edad?:number) {
+        this.nombre = nombre;
+        if (edad) {
+            this.edad = edad;
+        }
+    }
+    get edad():number {return this._edad;}
+    set edad(edad:number) {this._edad = edad;}
+    public mostrar = ()=>this.nombre + " y tiene " + this.edad;
+}
+
+console.log('------------------16-----------------');
+let av3:Avenger3 = new Avenger3("Batman");
+av3.edad = 40;
+console.log(av3.mostrar());
+let av4:Avenger3 = new Avenger3("Aquaman", 30);
+console.log(av4.mostrar());
