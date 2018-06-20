@@ -1,9 +1,9 @@
 <?php
 class Mesa
 {
-    protected $id;
-    protected $codigo;
-    protected $estado;
+    public $id;
+    public $codigo;
+    public $estado;
     
     public function GetCodigo() {
         return $this->codigo;
@@ -25,6 +25,8 @@ class Mesa
         }
     }
     
+    public function __construct(){}
+
     public function BorrarMesa() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
@@ -54,7 +56,7 @@ class Mesa
     }
 
     public function GuardarMesa() {
-        if ($this->id > 0) {
+        if ($this->id >= 0) {
             $this->ModificarMesa();
         } else {
             $this->InsertarMesa();
@@ -63,11 +65,11 @@ class Mesa
 
     public static function TraerMesas() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select * from mesas");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from mesas;");
         $consulta->execute();
         $mesas = $consulta->fetchAll(PDO::FETCH_CLASS, "Mesa");
         foreach($mesas as $mesa) {
-            echo $mesa->toString();
+            //echo $mesa->toString();
         }
         return $mesas;
     }

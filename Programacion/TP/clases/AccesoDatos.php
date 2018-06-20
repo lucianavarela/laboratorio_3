@@ -17,7 +17,7 @@ class AccesoDatos
     }
  
     public function RetornarConsulta($sql)
-    { 
+    {
         return $this->objetoPDO->prepare($sql); 
     }
      public function RetornarUltimoIdInsertado()
