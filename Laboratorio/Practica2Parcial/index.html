@@ -19,48 +19,44 @@
     <main>
         <form id="formulario" style="padding-top: 10px;">
             <div class="form-group">
-                <label for="id">Id</label>
-                <input class="form-control" id="id">
+                <label for="txtId">Id</label>
+                <input class="form-control" id="txtId">
             </div>
             <div class="form-group">
-                <label for="nombre">Nombre</label>
-                <input class="form-control" id="nombre">
+                <label for="txtNombre">Nombre</label>
+                <input class="form-control" id="txtNombre">
             </div>
             <div class="form-group">
-                <label for="edad">Edad</label>
-                <input class="form-control" type="number" id="edad">
+                <label for="txtEdad">Edad</label>
+                <input class="form-control" type="number" id="txtEdad">
             </div>
             <div class="row">
                 <div class="col-sm">
                     <div class="form-group">
-                        <label for="especie">Especie</label>
-                        <select name="especie" id="especie" class="form-control">
-                            <option value="gato">Gato</option>
-                            <option value="perro">Perro</option>
-                            <option value="gallina">Gallina</option>
-                            <option value="pato">Pato</option>
+                        <label for="selectTipo">Especie</label>
+                        <select name="especie" id="selectTipo" class="form-control">
                         </select>
                     </div>
                 </div>
                 <div class="col-sm">
                     <div class="form-group">
                         <label for="patas">Cantidad de Patas</label>
-                        <input class="form-control" type="number" id="patas">
+                        <input class="form-control" type="number" min="0" max="4" name="" id="txtPatas">
                     </div>
                 </div>
             </div>
             <div class="row" id='buttons'>
                 <div class="col-sm-2">
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-success" id="btnAgregar" onclick="agregarMascota()">Agregar</button>
                 </div>
                 <div class="col-sm-2">
-                    <button type="submit" class="btn btn-warning">Modificar</button>
+                    <button type="submit" class="btn btn-warning" id="btnModificar" onclick="modificarMascota()">Modificar</button>
                 </div>
                 <div class="col-sm-2">
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="submit" class="btn btn-danger" id="btnEliminar" onclick="eliminarMascota()">Eliminar</button>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-primary">Limpiar LocalStorage</button>
+                    <button class="btn btn-primary" id="btnClearStorage" onclick="cleanStorage()">Limpiar LocalStorage</button>
                 </div>
             </div>
         </form>
@@ -73,23 +69,20 @@
             <div class="row" id='buttons'>
                 <div class="col-2-sm">
                     <div class="form-group">
-                        <label for="patas">Filtrar por: </label>
-                        <select name="especie" id="especie" class="form-control">
-                            <option value="gato">Gato</option>
-                            <option value="perro">Perro</option>
-                            <option value="gallina">Gallina</option>
-                            <option value="pato">Pato</option>
+                        <label for="cmbFiltro">Filtrar por: </label>
+                        <select name="especie" id="cmbFiltro" class="form-control">
+                            <option value="-1">Todos</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-2-sm offset-md-4">
                     <div class="form-group">
-                        <label for="patas">Promedio de edad</label>
-                        <input class="form-control" type="number" id="promedio" disabled>
+                        <label for="txtPromedio">Promedio de edad:</label>
+                        <input class="form-control" type="number" id="txtPromedio" disabled>
                     </div>
                 </div>
                 <div class="col-sm align-self-end">
-                    <button class="btn btn-info">Calcular Promedio</button>
+                    <button class="btn btn-info" onclick="calcularPromedio()">Calcular Promedio</button>
                 </div>
             </div>
         </section>

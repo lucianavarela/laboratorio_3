@@ -12,10 +12,20 @@ var __extends = (this && this.__extends) || (function () {
 var Clases;
 (function (Clases) {
     var Animal = /** @class */ (function () {
-        function Animal() {
+        function Animal(id, nombre, edad, patas, tipo) {
+            this.id = 0;
+            this.nombre = "";
+            this.edad = 0;
+            this.patas = 0;
+            this.tipo = Clases.tipoMascota.Perro;
+            this.id = id;
+            this.nombre = nombre;
+            this.edad = edad;
+            this.patas = patas;
+            this.tipo = tipo;
         }
         Animal.prototype.toJSON = function () {
-            var json = "{\"nombre\":\"" + this.nombre + "\", \"edad\":" + this.edad + ",\"patas\":" + this.patas + "}";
+            var json = "{\"id\":\"" + this.id + "\", \"nombre\":\"" + this.nombre + "\", \"edad\":" + this.edad + ",\"patas\":" + this.patas + ", \"tipo\":" + this.tipo + "}";
             return json;
         };
         return Animal;
@@ -26,8 +36,8 @@ var Clases;
 (function (Clases) {
     var Mascota = /** @class */ (function (_super) {
         __extends(Mascota, _super);
-        function Mascota() {
-            return _super !== null && _super.apply(this, arguments) || this;
+        function Mascota(id, nombre, edad, patas, tipo) {
+            return _super.call(this, id, nombre, edad, patas, tipo) || this;
         }
         return Mascota;
     }(Clases.Animal));
@@ -35,7 +45,6 @@ var Clases;
 })(Clases || (Clases = {}));
 ///<reference path="mascota.ts"/>
 $(function () {
-    // localStorage.clear();
     cargarTipos();
     mostrarMascotas();
     $('#cmbFiltro').change(function () {
@@ -45,21 +54,48 @@ $(function () {
     $('#chkName').change(mapearCampos);
     $('#chkEdad').change(mapearCampos);
     $('#chkPatas').change(mapearCampos);
-    //mapearCampos();
+    mapearCampos();
 });
 function agregarMascota() {
+    var tipo = Number($('#selectTipo').val());
+    var nuevaMascota = new Clases.Mascota(Number($('#txtId').val()), String($('#txtNombre').val()), Number($('#txtEdad').val()), Number($('#txtPatas').val()), tipo);
+    var MascotasString = localStorage.getItem("Mascotas");
+    var MascotasJSON = MascotasString == null ? [] : JSON.parse(MascotasString);
+    MascotasJSON.push(JSON.parse(nuevaMascota.toJSON()));
+    localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
+    mostrarMascotas();
+    limpiarCampos();
+}
+function modificarMascota() {
     var id = Number($('#txtId').val());
     var tipo = Number($('#selectTipo').val());
     var nuevaMascota = new Clases.Mascota(Number($('#txtId').val()), String($('#txtNombre').val()), Number($('#txtEdad').val()), Number($('#txtPatas').val()), tipo);
     var MascotasString = localStorage.getItem("Mascotas");
     var MascotasJSON = MascotasString == null ? [] : JSON.parse(MascotasString);
-    console.log(nuevaMascota.toJSON());
-    MascotasJSON.push(JSON.parse(nuevaMascota.toJSON()));
+    var indice = -1;
+    for (var i = 0; i < MascotasJSON.length; i++) {
+        if (MascotasJSON[i].id == id) {
+            indice = i;
+            break;
+        }
+    }
+    if (indice != -1) {
+        MascotasJSON[indice] = JSON.parse(nuevaMascota.toJSON());
+        localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
+        mostrarMascotas();
+    }
+    limpiarCampos();
+}
+function eliminarMascota() {
+    var id = Number($('#txtId').val());
+    var MascotasString = localStorage.getItem("Mascotas");
+    var MascotasJSON = MascotasString == null ? [] : JSON.parse(MascotasString);
+    MascotasJSON = MascotasJSON.filter(function (mascota) {
+        return mascota.id != id;
+    });
     localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
-    alert("Mascota guardada!!!");
     mostrarMascotas();
     limpiarCampos();
-    //console.log(nuevaMascota.toJSON());
 }
 function limpiarCampos() {
     $('#txtNombre').val("");
@@ -80,32 +116,24 @@ function mostrarMascotas() {
     $('#divTabla').html(tabla);
 }
 function cargarTipos() {
-    /* var paises = data.map(function(p){
-         return p.pais;
-     })
-     .unique()
-     .sort();
- */
-    for (var i = 0; i < 5; i++) {
-        $("#cmbFiltro").append('<option value="' + i + '">' + Clases.tipoMascota[i] + '</option>');
+    for (var i = 0;; i++) {
+        if (Clases.tipoMascota[i]) {
+            $("#cmbFiltro, #selectTipo").append('<option value="' + i + '">' + Clases.tipoMascota[i] + '</option>');
+        }
+        else {
+            break;
+        }
     }
-    $.each(Clases.tipoMascota, function (value, tipo) {
-        /* $("#cmbFiltro").append('<option value="'+value+'">'+tipo+'</option>');
-             //console.log(x);
-             i++;
-             */
-    });
 }
 function filtrarMascotas(tipo) {
-    //console.log(tipo);
-    var mascotasFiltradas;
     var MascotasString = localStorage.getItem("Mascotas");
     var MascotasJSON = MascotasString == null ? [] : JSON.parse(MascotasString);
-    mascotasFiltradas = MascotasJSON.filter(function (mascota) {
-        return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
-    });
-    //console.log(mascotasFiltradas);
-    mostrarMascotasPorTipo(mascotasFiltradas);
+    if (tipo != -1) {
+        MascotasJSON = MascotasJSON.filter(function (mascota) {
+            return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
+        });
+    }
+    mostrarMascotasPorTipo(MascotasJSON);
 }
 function cleanStorage() {
     localStorage.clear();
@@ -132,26 +160,25 @@ function calcularPromedio() {
     var mascotasFiltradas;
     var MascotasString = localStorage.getItem("Mascotas");
     var MascotasJSON = MascotasString == null ? [] : JSON.parse(MascotasString);
-    mascotasFiltradas = MascotasJSON.filter(function (mascota) {
-        return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
-    });
-    totalEdades = mascotasFiltradas.reduce(function (anterior, actual) {
+    if (tipo != -1) {
+        MascotasJSON = MascotasJSON.filter(function (mascota) {
+            return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
+        });
+    }
+    totalEdades = MascotasJSON.reduce(function (anterior, actual) {
         return anterior += actual.edad;
     }, 0);
-    console.log(totalEdades);
-    cantidad = mascotasFiltradas.length;
-    console.log(cantidad);
+    cantidad = MascotasJSON.length;
     if (cantidad != 0) {
         promedio = totalEdades / cantidad;
     }
-    $('#txtPromedio').val(promedio);
+    $('#txtPromedio').val(promedio.toFixed(2));
 }
 function mapearCampos() {
     var chkId = $('#chkId')[0].checked;
     var chkName = $('#chkName')[0].checked;
     var chkEdad = $('#chkEdad')[0].checked;
     var chkPatas = $('#chkPatas')[0].checked;
-    //console.log(chkId);
     var MascotasString = localStorage.getItem("Mascotas");
     var MascotasJSON = MascotasString == null ? [] : JSON.parse(MascotasString);
     var tabla = "<table class='table'><thead><tr>";
@@ -193,7 +220,4 @@ var Clases;
         tipoMascota[tipoMascota["Pez"] = 5] = "Pez";
     })(tipoMascota = Clases.tipoMascota || (Clases.tipoMascota = {}));
 })(Clases || (Clases = {}));
-function loadPet() {
-    console.log();
-}
 //# sourceMappingURL=main.js.map

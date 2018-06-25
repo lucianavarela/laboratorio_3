@@ -1,5 +1,6 @@
 //PARA INICIALIZAR TYPESCRIPT -> tsc --init
 //PARA EL WATCHER -> tsc -w
+//CONFIGURAR CONFIG
 
 // 1 --> array
 let vector:number[] = [1,2,3,4];
@@ -7,7 +8,7 @@ let vector:number[] = [1,2,3,4];
 console.log('------------------1------------------');
 for(var a=0;a<vector.length;a++) {
     console.log(vector[a]);
-}
+} 
 
 // 2 --> tupla
 let tupla:[number, string] = [1, "Ironman"];
@@ -214,7 +215,6 @@ console.log(Xmen.nombre_de_clase);
 console.log(Xmen.crearXmen().nombre);
 
 // 18 --> Constructor privado
-
 class Xmen2 {
     private static instancia:Xmen2;
     private _nombre:string="";
@@ -237,3 +237,38 @@ console.log(xman2.nombre);
 xman2.nombre = "Supergirl";
 let xman3:Xmen2 = Xmen2.getInstance();
 console.log(xman3.nombre);
+
+// 19 --> namespace
+namespace Funciones {
+    export function f1() {
+        console.log('soy la funcion 1');
+    }
+    export function f2() {
+        console.log('soy la funcion 2');
+    }
+}
+
+console.log('------------------19-----------------');
+Funciones.f1();
+Funciones.f2();
+
+
+// 20 --> herencia
+class AvengerHeredado extends Avenger2{}
+let ah:AvengerHeredado = new AvengerHeredado("heredado");
+
+console.log('------------------20-----------------');
+console.log("OBJETO " + ah.nombre);
+
+// 21 --> herencia 2
+class AvengerHeredado2 extends Avenger2{
+    edad: number=0;
+    constructor(nombre:string, edad:number) {
+        super(nombre);
+        this.edad=edad;
+    }
+}
+let ah2:AvengerHeredado2 = new AvengerHeredado2("heredado2", 44);
+console.log('------------------21-----------------');
+console.log("OBJETO " + ah2.nombre + " " + ah2.edad);
+

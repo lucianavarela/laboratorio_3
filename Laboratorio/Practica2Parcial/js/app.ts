@@ -2,9 +2,7 @@
 ///<reference path="mascota.ts"/>
 
 $(function () {
-    // localStorage.clear();
     cargarTipos();
-
     mostrarMascotas();
 
     $('#cmbFiltro').change(function () {
@@ -16,34 +14,51 @@ $(function () {
     $('#chkEdad').change(mapearCampos);
     $('#chkPatas').change(mapearCampos);    
 
-    //mapearCampos();
+    mapearCampos();
 });
 
 function agregarMascota(): void {
+    let tipo: Clases.tipoMascota = Number($('#selectTipo').val());
+    let nuevaMascota = new Clases.Mascota(Number($('#txtId').val()), String($('#txtNombre').val()), Number($('#txtEdad').val()), Number($('#txtPatas').val()), tipo);
+    let MascotasString: string | null = localStorage.getItem("Mascotas");
+    let MascotasJSON: JSON[] = MascotasString == null ? [] : JSON.parse(MascotasString);
+    MascotasJSON.push(JSON.parse(nuevaMascota.toJSON()));
+    localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
+    mostrarMascotas();
+    limpiarCampos();
+}
+
+function modificarMascota(): void {
     let id: number = Number($('#txtId').val());
     let tipo: Clases.tipoMascota = Number($('#selectTipo').val());
     let nuevaMascota = new Clases.Mascota(Number($('#txtId').val()), String($('#txtNombre').val()), Number($('#txtEdad').val()), Number($('#txtPatas').val()), tipo);
-
     let MascotasString: string | null = localStorage.getItem("Mascotas");
-
-    let MascotasJSON: JSON[] = MascotasString == null ? [] : JSON.parse(MascotasString);
-
-    console.log(nuevaMascota.toJSON());
-
-    MascotasJSON.push(JSON.parse(nuevaMascota.toJSON()));
-
-    localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
-
-    alert("Mascota guardada!!!");
-
-    mostrarMascotas();
-
+    let MascotasJSON: Clases.Mascota[] = MascotasString == null ? [] : JSON.parse(MascotasString);
+    let indice:number = -1;
+    for (var i=0; i<MascotasJSON.length; i++) {
+        if (MascotasJSON[i].id == id) {
+            indice = i;
+            break;
+        }
+    }
+    if (indice != -1) {
+        MascotasJSON[indice] = JSON.parse(nuevaMascota.toJSON());
+        localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
+        mostrarMascotas();
+    }
     limpiarCampos();
+}
 
-
-
-    //console.log(nuevaMascota.toJSON());
-
+function eliminarMascota(): void {
+    let id: number = Number($('#txtId').val());
+    let MascotasString: string | null = localStorage.getItem("Mascotas");
+    let MascotasJSON: Clases.Mascota[] = MascotasString == null ? [] : JSON.parse(MascotasString);
+    MascotasJSON = MascotasJSON.filter(function (mascota: Clases.Mascota) {
+        return mascota.id != id;
+    });
+    localStorage.setItem("Mascotas", JSON.stringify(MascotasJSON));
+    mostrarMascotas();
+    limpiarCampos();
 }
 
 function limpiarCampos() {
@@ -52,7 +67,6 @@ function limpiarCampos() {
     $('#txtEdad').val("");
     $('#txtPatas').val("");
     $('#selectTipo').val(0);
-
     $('#txtId').focus();
 }
 
@@ -63,8 +77,6 @@ function mostrarMascotas() {
     let MascotasJSON: Clases.Mascota[] = MascotasString == null ? [] : JSON.parse(MascotasString);
 
     let tabla: string = "<table class='table'><thead><tr><th>Id</th><th>Nombre</th><th>Edad</th><th>Tipo</th><th>Patas</th></tr>";
-
-
 
     for (let i = 0; i < MascotasJSON.length; i++) {
 
@@ -79,46 +91,24 @@ function mostrarMascotas() {
 }
 
 function cargarTipos() {
-    /* var paises = data.map(function(p){
-         return p.pais;
-     })
-     .unique()
-     .sort();
- */
-    for (let i = 0; i < 5; i++) {
-        $("#cmbFiltro").append('<option value="' + i + '">' + Clases.tipoMascota[i] + '</option>');
+    for (let i = 0; ; i++) {
+        if(Clases.tipoMascota[i]) {
+            $("#cmbFiltro, #selectTipo").append('<option value="' + i + '">' + Clases.tipoMascota[i] + '</option>');
+        } else {
+            break;
+        }
     }
-
-
-
-    $.each(Clases.tipoMascota, function (value, tipo) {
-        /* $("#cmbFiltro").append('<option value="'+value+'">'+tipo+'</option>');
-             //console.log(x);
-             i++;
-             */
-
-    });
 }
 
 function filtrarMascotas(tipo: number) {
-    //console.log(tipo);
-
-    let mascotasFiltradas: Array<Clases.Mascota>;
-
     let MascotasString: string | null = localStorage.getItem("Mascotas");
-
     let MascotasJSON: Clases.Mascota[] = MascotasString == null ? [] : JSON.parse(MascotasString);
-
-    mascotasFiltradas = MascotasJSON.filter(function (mascota: Clases.Mascota) {
-
-        return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
-
+    if (tipo != -1) {
+        MascotasJSON = MascotasJSON.filter(function (mascota: Clases.Mascota) {
+            return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
+        });
     }
-
-    );
-    //console.log(mascotasFiltradas);
-    mostrarMascotasPorTipo(mascotasFiltradas);
-
+    mostrarMascotasPorTipo(MascotasJSON);
 }
 
 function cleanStorage() {
@@ -128,21 +118,15 @@ function cleanStorage() {
 
 function mostrarMascotasPorTipo(lista: Array<Clases.Mascota>) {
 
-
     let tabla: string = "<table class='table'><thead><tr><th>Id</th><th>Nombre</th><th>Edad</th><th>Tipo</th><th>Patas</th></tr>";
 
     if (lista.length == 0) {
         tabla += "<tr><td colspan='4'>No hay mascotas que mostrar</td></tr>";
     }
     else {
-
-
         for (let i = 0; i < lista.length; i++) {
-
             tabla += `<tr><td>${lista[i].id}</td><td>${lista[i].nombre}</td><td>${lista[i].edad}</td><td>${Clases.tipoMascota[lista[i].tipo]}</td><td>${lista[i].patas}</td></tr>`;
-
         }
-
     }
 
     tabla += `</table>`;
@@ -159,38 +143,30 @@ function calcularPromedio() {
 
     let tipo: number = Number($('#cmbFiltro').val());
 
-
-
     let mascotasFiltradas: Array<Clases.Mascota>;
 
     let MascotasString: string | null = localStorage.getItem("Mascotas");
 
     let MascotasJSON: Clases.Mascota[] = MascotasString == null ? [] : JSON.parse(MascotasString);
 
-    mascotasFiltradas = MascotasJSON.filter(function (mascota: Clases.Mascota) {
+    if (tipo != -1) {
+        MascotasJSON = MascotasJSON.filter(function (mascota: Clases.Mascota) {
+            return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
+        });
+    }
 
-        return Clases.tipoMascota[mascota.tipo] === Clases.tipoMascota[tipo];
-
-    });
-
-    totalEdades = mascotasFiltradas.reduce(function (anterior, actual) {
+    totalEdades = MascotasJSON.reduce(function (anterior, actual) {
         return anterior += actual.edad;
 
     }, 0);
 
-
-    console.log(totalEdades);
-
-    cantidad = mascotasFiltradas.length;
-
-
-    console.log(cantidad);
+    cantidad = MascotasJSON.length;
 
     if (cantidad != 0) {
         promedio = totalEdades / cantidad;
     }
 
-    $('#txtPromedio').val(promedio);
+    $('#txtPromedio').val(promedio.toFixed(2));
 
 }
 
@@ -200,9 +176,6 @@ function mapearCampos() {
         let chkName: boolean = (<HTMLInputElement> $('#chkName')[0]).checked;
         let chkEdad: boolean = (<HTMLInputElement> $('#chkEdad')[0]).checked;
         let chkPatas: boolean = (<HTMLInputElement> $('#chkPatas')[0]).checked;
-
-        //console.log(chkId);
-        
     
         let MascotasString: string | null = localStorage.getItem("Mascotas");
     
