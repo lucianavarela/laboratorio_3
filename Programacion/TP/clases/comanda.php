@@ -1,25 +1,21 @@
 <?php
 class Comanda
 {
-    protected $id;
-    protected $nombreCliente;
-    protected $codigo;
-    protected $estado;
-    protected $importe;
-    protected $idMesa;
-    protected $foto;
-    protected $fechaIngresado;
-    protected $fechaEstimado;
-    protected $fechaEntregado;
+    public $id;
+    public $nombreCliente;
+    public $codigo;
+    public $importe;
+    public $idMesa;
+    public $foto;
+    public $fechaIngresado;
+    public $fechaEstimado;
+    public $fechaEntregado;
     
     public function GetNombreCliente() {
         return $this->nombreCliente;
     }
     public function GetCodigo() {
         return $this->codigo;
-    }
-    public function GetEstado() {
-        return ucwords($this->estado);
     }
     public function GetImporte() {
         return $this->importe;
@@ -46,15 +42,6 @@ class Comanda
     public function SetCodigo($value) {
         if (strlen($value) == 5) {
             $this->codigo = $value;
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public function SetEstado($value) {
-        $estados = array("pendiente", "en preparación", "listo para servir", "cerrado", "cancelado");
-        if (in_array($value, $estados)) {
-            $this->estado = $value;
             return true;
         } else {
             return false;
@@ -96,11 +83,10 @@ class Comanda
             $mesa->SetEstado('con cliente esperando pedido');
             $mesa->GuardarMesa();
             $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-            $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into comandas (nombreCliente,codigo,estado,idMesa,foto)
+            $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into comandas (nombreCliente,codigo,idMesa,foto)
                 values(
                 '$this->nombreCliente',
                 '$nuevoCodigo',
-                '$this->estado',
                 '$this->idMesa',
                 '$this->foto'
                 );");
@@ -117,7 +103,6 @@ class Comanda
             update comandas 
             set nombreCliente='$this->nombreCliente',
             codigo='$this->codigo',
-            estado='$this->estado',
             importe='$this->importe',
             idMesa='$this->idMesa',
             foto='$this->foto',
@@ -129,7 +114,7 @@ class Comanda
     }
 
     public function GuardarComanda() {
-        if ($this->id > 0) {
+        if ($this->id >= 0) {
             $this->ModificarComanda();
         } else {
             $codigo = $this->InsertarComanda();
@@ -152,30 +137,29 @@ class Comanda
         $consulta =$objetoAccesoDato->RetornarConsulta("select * from comandas;");
         $consulta->execute();
         $comandas = $consulta->fetchAll(PDO::FETCH_CLASS, "Comanda");
-        foreach($comandas as $comanda) {
-            echo $comanda->toString();
-        }
         return $comandas;
     }
 
-    public static function TraerComanda($codigoComanda, $codigoMesa) {
+    public static function TraerComanda($codigoComanda) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select * from comandas where codigo = '$codigoComanda' and idMesa = '$codigoMesa';");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from comandas where codigo = '$codigoComanda';");
+        $consulta->execute();
+        $comandaResultado= $consulta->fetchObject('Comanda');
+        return $comandaResultado;
+    }
+
+    public function ValidarPedidos() {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from comandas where codigo = '$codigoComanda';");
         $consulta->execute();
         $comandaResultado= $consulta->fetchObject('Comanda');
         if ($comandaResultado) {
             $pedidos = Pedido::TraerPedidosPorComanda($codigoComanda);
-            foreach($pedidos as $pedido) {
-
-            }
-            echo "Estado de su pedido: ".($comandaResultado->GetEstado());
-        } else {
-            echo "Comanda incorrecto";
         }
         return $comandaResultado;
     }
 
     public function toString() {
-        return "\nComanda #$this->codigo: $this->nombreCliente (Mesa #$this->idMesa) -> ".$this->GetEstado();
+        return "\nComanda #$this->codigo: $this->nombreCliente (Mesa #$this->idMesa)";
     }
 }

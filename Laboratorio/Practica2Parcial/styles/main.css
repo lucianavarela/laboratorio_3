@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: powderblue;
+}
+
+header {
+    padding: 3rem 0 0 0;
+}
+
+.header {
+    text-align: center;
+}
+
+#formulario {
+    padding: 4rem;
+}
+
+#buttons {
+    text-align: center;
+}
+
+#buttons button {
+    margin: 1rem 0;
+}
+
+.chksColms label {
+    margin: 0;
+}
+
+.seccionTabla {
+    padding: 0 1rem;
+}

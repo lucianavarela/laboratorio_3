@@ -1,12 +1,12 @@
 <?php
 class Pedido
 {
-    protected $id;
-    protected $idComanda;
-    protected $sector;
-    protected $idEmpleado;
-    protected $descripcion;
-    protected $terminado;
+    public $id;
+    public $idComanda;
+    public $sector;
+    public $idEmpleado;
+    public $descripcion;
+    public $estado;
     
     
     public function GetIdComanda() {
@@ -21,6 +21,9 @@ class Pedido
     public function GetDescripcion() {
         return $this->descripcion;
     }
+    public function GetEstado() {
+        return $this->estado;
+    }
 
     public function SetIdComanda($value) {
         $this->idComanda = $value;
@@ -33,6 +36,15 @@ class Pedido
     }
     public function SetDescripcion($value) {
         $this->descripcion = $value;
+    }
+    public function SetEstado($value) {
+        $estados = array("pendiente", "en preparación", "listo para servir", "cerrado", "cancelado");
+        if (in_array($value, $estados)) {
+            $this->estado = $value;
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public function BorrarPedido() {
@@ -51,57 +63,57 @@ class Pedido
             update pedidos 
             set sector='$this->sector',
             idComanda='$this->idComanda',
-            idEmpleado='$this->idEmpleado',
-            descripcion='$this->descripcion'
-            terminado='$this->terminado',
+            idEmpleado=$this->idEmpleado,
+            descripcion='$this->descripcion',
+            estado='$this->estado'
             WHERE id=$this->id");
         return $consulta->execute();
     }
 
     public static function CargarPedidos($arrayComanda, $comanda) {
-        if (in_array('barra', $arrayComanda)) {
+        if (array_key_exists('barra', $arrayComanda)) {
             $pedido_nuevo = new Pedido();
             $pedido_nuevo->sector = 'barra';
-            $pedido_nuevo->idPedido = $comanda;
-            $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['barra']);
+            $pedido_nuevo->idComanda = $comanda;
+            $pedido_nuevo->descripcion = $arrayComanda['barra'];
             $pedido_nuevo->InsertarPedido();
         }
-        if (in_array('cerveza', $arrayComanda)) {
+        if (array_key_exists('cerveza', $arrayComanda)) {
             $pedido_nuevo = new Pedido();
             $pedido_nuevo->sector = 'cerveza';
-            $pedido_nuevo->idPedido = $comanda;
-            $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['cerveza']);
+            $pedido_nuevo->idComanda = $comanda;
+            $pedido_nuevo->descripcion = $arrayComanda['cerveza'];
             $pedido_nuevo->InsertarPedido();
         }
-        if (in_array('cocina', $arrayComanda)) {
+        if (array_key_exists('cocina', $arrayComanda)) {
             $pedido_nuevo = new Pedido();
             $pedido_nuevo->sector = 'cocina';
-            $pedido_nuevo->idPedido = $comanda;
-            $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['cocina']);
+            $pedido_nuevo->idComanda = $comanda;
+            $pedido_nuevo->descripcion = $arrayComanda['cocina'];
             $pedido_nuevo->InsertarPedido();
         }
-        if (in_array('candy', $arrayComanda)) {
+        if (array_key_exists('candy', $arrayComanda)) {
             $pedido_nuevo = new Pedido();
             $pedido_nuevo->sector = 'candy';
-            $pedido_nuevo->idPedido = $comanda;
-            $pedido_nuevo->descripcion = SetDescripcion($arrayComanda['candy']);
+            $pedido_nuevo->idComanda = $comanda;
+            $pedido_nuevo->descripcion = $arrayComanda['candy'];
             $pedido_nuevo->InsertarPedido();
         }
-        return $consulta->rowCount();
+        return true;
     }
 
     public function InsertarPedido() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into pedidos
-        (sector,idEmpleado,descripcion,idComanda,terminado)values
-        ('$this->sector',,'$this->descripcion','$this->idComanda','false'')"
+        (sector,descripcion,idComanda,estado)values
+        ('$this->sector','$this->descripcion','$this->idComanda','$this->estado')"
         );
         $consulta->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
 
     public function GuardarPedido() {
-        if ($this->id > 0) {
+        if ($this->id >= 0) {
             $this->ModificarPedido();
         } else {
             $this->InsertarPedido();
@@ -123,27 +135,33 @@ class Pedido
         return $pedidoResultado;
     }
 
-    public static function TraerPedidosPendientes($sector) {
+    public static function TraerPendientes() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta =$objetoAccesoDato->RetornarConsulta(
-            "SELECT p.id, p.sector, p.idEmpleado, p.descripcion, p.terminado, p.idComanda
-            FROM pedidos p
-            INNER JOIN comandas c
-            ON p.idComanda = c.codigo
-            WHERE c.estado = 'pendiente'
-            AND p.sector = '$sector'"
+            "SELECT *
+            FROM pedidos
+            WHERE estado = 'pendiente'"
         );
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
     }
 
-
-    public static function TraerPedidosPorComanda($comanda) {
+    public static function TraerPendientesDeSector($sector) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
         $consulta =$objetoAccesoDato->RetornarConsulta(
             "SELECT *
             FROM pedidos
-            WHERE idComanda = '$comanda'"
+            WHERE estado = 'pendiente'
+            AND sector = '$sector'"
+        );
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
+    }
+
+    public static function TraerListos() {
+        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
+        $consulta =$objetoAccesoDato->RetornarConsulta(
+            "SELECT * FROM comandas WHERE estado = 'listo para servir'"
         );
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");

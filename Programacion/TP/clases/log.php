@@ -1,10 +1,10 @@
 <?php
 class Log
 {
-    protected $id;
-    protected $param1;
-    protected $param2;
-    protected $param3;
+    public $id;
+    public $param1;
+    public $param2;
+    public $param3;
     
     public function GetParam1() {
         return $this->param1;
@@ -55,7 +55,7 @@ class Log
     }
 
     public function GuardarLog() {
-        if ($this->id > 0) {
+        if ($this->id >= 0) {
             $this->ModificarLog();
         } else {
             $this->InsertarLog();
