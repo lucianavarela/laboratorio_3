@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.checkbox-filter {
+    display: inline-block;
+    margin: 0.5rem;
+}
+
+.titulo {
+    text-align: center;
+}
+
+.section {
+    margin: 1rem;
+    text-align: center;
+}
+
+.field {
+    display: inline-block;
+}
+
+#divTabla {
+    margin: 0.5rem;
+    background-color: white;
+}
+
+.add-form .row, .add-form button {
+    margin: 0.5rem 0;
+}
+
+.boton {
+    border: none;
+    border-radius: 5px;
+    padding: 0.4rem;
+    color: white;
+    box-sizing: border-box;
+}
+
+#btnAgregar, #btnModificar, #btnEliminar, #btnPromedio {
+    background-color: #007aff;
+}
+
+#btnClearStorage {
+    background-color: #dc3546;
+}
+
+#btnPromedio {
+    background-color: #13a5b4;
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="bower_components/bootstrap4/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/enumerados.js"></script>
+    <script src="js/personaje.js"></script>
+    <script src="js/heroe.js"></script>
+    <title>ABM Heroes</title>
+</head>
+
+<body>
+
+    <div class="add-form" style="background-color:powderblue">
+
+        <h1 class="titulo">ABM Heroes</h1>
+        <hr>
+        <div class="form-group" style="margin: 3rem;">
+            <div class="row">
+                <label for="txtId" class="col-sm-1">Id: </label>
+                <div class="col-sm-11">
+                    <input type="number" name="" id="txtId" class="form-control">
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="txtNombre" class="col-sm-1">Nombre:</label>
+                <div class="col-sm-11">
+                    <input type="text" name="txtNombre" id="txtNombre" class="form-control">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <label for="" class="col-sm-1">Edad: </label>
+                <div class="col-sm-11">
+                    <input type="number" name="" id="txtEdad" class="form-control">
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="" class="col-sm-1">Tipo: </label>
+                <div class="col-sm-5">
+                    <select name="" id="selectTipo" class="form-control"></select>
+                </div>
+
+                <label for="col-sm" class="col-sm-1">Poder Principal: </label>
+                <div class="col-sm-5">
+                    <input name="" id="txtPoder" class="form-control">
+                </div>
+
+            </div>
+            
+            <div class="row section">
+                <div class="col-sm-2">
+                    <button id="btnAgregar" onclick="agregarHeroe()" class="boton">Agregar</button>
+                </div>
+                <div class="col-sm-2">
+                    <button id="btnModificar" onclick="modificar()" class="boton">Modificar</button>
+                </div>
+                <div class="col-sm-2">
+                    <button id="btnEliminar" onclick="eliminar()" class="boton">Eliminar</button>
+                </div>
+                <div class="col-sm-6">
+                    <button id="btnClearStorage" onclick="cleanStorage()" class="boton">Limpiar LocalStorage</button>
+                </div>
+            </div>
+        </div>
+            <hr>
+            <h2 class="titulo">Filtros</h2>
+            <hr>
+
+            <div class="section row">
+                <label for="cmbFiltro" class="col-sm-2">Filtrar por:</label>
+                <div class="field col-sm-2">
+                    <select name="" class="form-control" id="cmbFiltro"></select>
+                </div>
+
+                <label for="txtPromedio" class="col-sm-2">Promedio de edad:</label>
+                <div class="field col-sm-2">
+                    <input type="text" class="form-control" id="txtPromedio" style="width:50px" readonly>
+                </div>
+
+                <div class="field col-sm-4">
+                    <button id="btnPromedio" onclick="calcularPromedio()" class="boton">Calcular Promedio</button>
+                </div>
+            </div>
+            <br>
+
+            <h3>Campos mostrados
+                <small>Tildar los campos a mostrar</small>
+            </h3>
+            <hr>
+            <div class="checkbox-filter">
+                <input type="checkbox" id="chkId" class="" checked>
+                <label for="chkId" class=""> Id </label>
+            </div>
+            <div class="checkbox-filter">
+                <input type="checkbox" id="chkName" class="" checked>
+                <label for="chkName" class="form-check-label"> Nombre </label>
+            </div>
+            <div class="checkbox-filter">
+                <input type="checkbox" id="chkEdad" class="" checked>
+                <label for="chkEdad" class=""> Edad: </label>
+            </div>
+            <div class="checkbox-filter">
+                <input type="checkbox" id="chkPoder" class="" checked>
+                <label for="chkPoder" class=""> Poder </label>
+            </div>
+
+            <hr>
+            <h2 class="titulo">Lista de Heroes</h2>
+            <hr>
+
+            <div id="divTabla" class="">
+
+            </div>
+
+    
+
+    </div>
+
+</body>
+
+</html>
