@@ -4,16 +4,12 @@ class Clase
     public $id;
     public $param1;
     public $param2;
-    public $param3;
-        
+    
     public function GetParam1() {
         return $this->param1;
     }
     public function GetParam2() {
         return $this->param2;
-    }
-    public function GetParam3() {
-        return $this->param3;
     }
 
     public function SetParam1($value) {
@@ -22,9 +18,9 @@ class Clase
     public function SetParam2($value) {
         $this->param2 = $value;
     }
-    public function SetParam3($value) {
-        $this->param3 = $value;
-    }
+    
+    public function __construct(){}
+
     public function BorrarClase() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
         $consulta =$objetoAccesoDato->RetornarConsulta("
@@ -40,21 +36,20 @@ class Clase
         $consulta =$objetoAccesoDato->RetornarConsulta("
             update clases 
             set param1='$this->param1',
-            param2='$this->param2',
-            param3='$this->param3'
+            param2='$this->param2'
             WHERE id=$this->id");
         return $consulta->execute();
     }
 
     public function InsertarClase() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into clases (param1,param2,param3)values('$this->param1','$this->param2','$this->param3')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into clases (param1,param2)values('$this->param1','$this->param2')");
         $consulta->execute();
-        return $objetoAccesoDato->RetornarUltimoIdInsertado();
+        return $nuevoParam1;
     }
 
     public function GuardarClase() {
-        if ($this->id -> 0) {
+        if ($this->id > 0) {
             $this->ModificarClase();
         } else {
             $this->InsertarClase();
@@ -63,20 +58,21 @@ class Clase
 
     public static function TraerClases() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id,param1 as param1, param2 as param2,param3 as param3 from clases");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from clases;");
         $consulta->execute();
-        return $consulta->fetchAll(PDO::FETCH_CLASS, "Clase");
+        $clases = $consulta->fetchAll(PDO::FETCH_CLASS, "Clase");
+        return $clases;
     }
 
     public static function TraerClase($id) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select id, param1 as param1, param2 as param2,param3 as param3 from clases where id = $id");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from clases where param1 = '$id'");
         $consulta->execute();
         $claseResultado= $consulta->fetchObject('Clase');
         return $claseResultado;
     }
 
     public function toString() {
-        return "Metodo mostar:".$this->param1."  ".$this->param2."  ".$this->param3;
+        return "\nClase #$this->param1 -> ".$this->GetParam2();
     }
 }
