@@ -69,7 +69,7 @@ class MWparaAutentificar
 			}
 			if($objDelaRespuesta->esValido) {
 				$payload=AutentificadorJWT::ObtenerData($token);
-				if($payload->nivel=="admin")
+				if($payload->perfil=="admin")
 				{
 					$response = $next($request, $response);
 				}
@@ -111,8 +111,14 @@ class MWparaAutentificar
 			$request = $request->withAttribute('usuario', $payload);
 			$response = $next($request, $response);
 		} else {
-			$objDelaRespuesta->respuesta="Por favor logueese para realizar esta accion!";
-			$objDelaRespuesta->elToken=$token;
+			if ($_SERVER['REQUEST_URI'] == "/laboratorio_3/Parcial2/api/usuario/") {
+				$objDelaRespuesta= new stdclass();
+				$objDelaRespuesta->respuesta='Hola';
+				$nueva=$response->withJson($objDelaRespuesta, 401);
+				return $nueva;
+			} else {
+				$objDelaRespuesta->respuesta="Por favor logueese para realizar esta accion!";
+			}
 		}
         
         if($objDelaRespuesta->respuesta!="") {
@@ -126,13 +132,18 @@ class MWparaAutentificar
 	public function VerificarAdmin($request, $response, $next) {
 		$objDelaRespuesta= new stdclass();
 		$objDelaRespuesta->respuesta="";
-		$nivel = $request->getAttribute('usuario')->nivel;
-		if($nivel == "admin") {
+		$perfil = $request->getAttribute('usuario')->perfil;
+		if($perfil == "admin") {
 			$response = $next($request, $response);
-		}
-		else
-		{
-			$objDelaRespuesta->respuesta="Solo admins";
+		} else {
+			if ($_SERVER['REQUEST_URI'] == "/laboratorio_3/Parcial2/api/usuario/") {
+				$objDelaRespuesta= new stdclass();
+				$objDelaRespuesta->respuesta='Hola';
+				$nueva=$response->withJson($objDelaRespuesta, 401);
+				return $nueva;
+			} else {
+				$objDelaRespuesta->respuesta="Solo admins";
+			}
 		}
         
         if($objDelaRespuesta->respuesta!="") {
@@ -143,28 +154,28 @@ class MWparaAutentificar
         return $response;
 	}
 
-	public function FiltrarVentas($request, $response, $next) {
+	public function FiltrarCompras($request, $response, $next) {
 		$objDelaRespuesta= new stdclass();
 		$objDelaRespuesta->respuesta="";
 		$usuario = $request->getAttribute('usuario');
-		$nivel = $usuario->nivel;
-		if($nivel == "usuario") {
+		$perfil = $usuario->perfil;
+		if($perfil == "usuario") {
 			$response = $next($request, $response);
-			$ventas = json_decode($response->getBody()->__toString());
-			if (is_array($ventas)) {
-				foreach ($ventas as $key => $venta) {
-					if ($venta->usuario != $usuario->id) {
-						unset($ventas[$key]);
+			$compras = json_decode($response->getBody()->__toString());
+			if (is_array($compras)) {
+				foreach ($compras as $key => $compra) {
+					if ($compra->usuario != $usuario->id) {
+						unset($compras[$key]);
 					}
 				}
 			} else {
-				if ($ventas->nivel != $nivel) {
-					$ventas = [];
+				if ($compras->perfil != $perfil) {
+					$compras = [];
 				}
 			}
-			$nueva=$response->withJson($ventas, 200);
+			$nueva=$response->withJson($compras, 200);
 			return $nueva;
-		} else if($nivel == "admin") {
+		} else if($perfil == "admin") {
 			$response = $next($request, $response);
 			return $response;
 		} else {

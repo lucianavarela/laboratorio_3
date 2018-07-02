@@ -3,14 +3,6 @@ require_once 'usuarios.php';
 require_once 'IApiUsable.php';
 class usuariosApi extends Usuario implements IApiUsable
 {
-	/*/Cargo el log
-	if ($request->getAttribute('empleado')) {
-		$new_log = new Log();
-		$new_log->idEmpleado = $request->getAttribute('empleado')->id;
-		$new_log->accion = "Ver usuarios";
-		$new_log->GuardarLog();
-	}
-	/*/
 	public function TraerUno($request, $response, $args) {
 		$id=$args['id'];
 		$usuarioObj=Usuario::TraerUsuario($id);
@@ -26,21 +18,27 @@ class usuariosApi extends Usuario implements IApiUsable
 
 	public function CargarUno($request, $response, $args) {
 		$ArrayDeParametros = $request->getParsedBody();
-		if ($ArrayDeParametros['nombre'] && $ArrayDeParametros['clave'] && $ArrayDeParametros['nivel']) {
-			if ($ArrayDeParametros['nivel'] == 'usuario' || $ArrayDeParametros['nivel'] == 'admin') {
-				$miusuario = new Usuario();
-				$miusuario->nombre = $ArrayDeParametros['nombre'];
-				$miusuario->clave = $ArrayDeParametros['clave'];
-				$miusuario->nivel = $ArrayDeParametros['nivel'];
-				$miusuario->GuardarUsuario();
-				$objDelaRespuesta= new stdclass();
-				$objDelaRespuesta->respuesta="Usuario creada!";
-				return $response->withJson($objDelaRespuesta, 200);
+		//var_dump($ArrayDeParametros);
+		if ($ArrayDeParametros['nombre'] && $ArrayDeParametros['clave'] && $ArrayDeParametros['sexo']) {
+			$miusuario = new Usuario();
+			if ($ArrayDeParametros['perfil']) {
+				if ($ArrayDeParametros['perfil'] == 'usuario' || $ArrayDeParametros['perfil'] == 'admin') {
+					$miusuario->perfil = $ArrayDeParametros['perfil'];
+				} else {
+					$objDelaRespuesta= new stdclass();
+					$objDelaRespuesta->respuesta="El perfil debe ser admin o usuario";
+					return $response->withJson($objDelaRespuesta, 401);
+				}
 			} else {
-				$objDelaRespuesta= new stdclass();
-				$objDelaRespuesta->respuesta="El nivel debe ser admin o usuario";
-				return $response->withJson($objDelaRespuesta, 401);
+				$miusuario->perfil = 'usuario';
 			}
+			$miusuario->nombre = $ArrayDeParametros['nombre'];
+			$miusuario->clave = $ArrayDeParametros['clave'];
+			$miusuario->sexo = $ArrayDeParametros['sexo'];
+			$miusuario->GuardarUsuario();
+			$objDelaRespuesta= new stdclass();
+			$objDelaRespuesta->respuesta="Usuario creado!";
+			return $response->withJson($objDelaRespuesta, 200);
 		} else {
 			$objDelaRespuesta= new stdclass();
 			$objDelaRespuesta->respuesta="Parametros faltantes";
@@ -70,7 +68,7 @@ class usuariosApi extends Usuario implements IApiUsable
 		$miusuario->id=$args['id'];
 		$miusuario->nombre=$ArrayDeParametros['nombre'];
 		$miusuario->clave=$ArrayDeParametros['clave'];
-		$miusuario->nivel=$ArrayDeParametros['nivel'];
+		$miusuario->perfil=$ArrayDeParametros['perfil'];
 		$miusuario->GuardarUsuario();
 		return $response->withJson($miusuario, 200);		
 	}

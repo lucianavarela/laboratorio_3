@@ -4,7 +4,8 @@ class Usuario
     public $id;
     public $nombre;
     public $clave;
-    public $nivel;
+    public $sexo;
+    public $perfil;
     
     public function GetNombre() {
         return $this->nombre;
@@ -12,8 +13,11 @@ class Usuario
     public function GetClave() {
         return $this->clave;
     }
-    public function GetNivel() {
-        return $this->nivel;
+    public function GetSexo() {
+        return $this->sexo;
+    }
+    public function GetPerfil() {
+        return $this->perfil;
     }
 
     public function SetNombre($value) {
@@ -22,8 +26,11 @@ class Usuario
     public function SetClave($value) {
         $this->clave = $value;
     }
-    public function SetNivel($value) {
-        $this->nivel = $value;
+    public function SetSexo($value) {
+        $this->sexo = $value;
+    }
+    public function SetPerfil($value) {
+        $this->perfil = $value;
     }
     
     public function BorrarUsuario() {
@@ -42,14 +49,15 @@ class Usuario
             update usuarios 
             set nombre='$this->nombre',
             clave='$this->clave',
-            nivel='$this->nivel'
+            sexo='$this->sexo',
+            perfil='$this->perfil'
             WHERE id=$this->id");
         return $consulta->execute();
     }
 
     public function InsertarUsuario() {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into usuarios (nombre,clave,nivel)values('$this->nombre','$this->clave','$this->nivel')");
+        $consulta =$objetoAccesoDato->RetornarConsulta("INSERT into usuarios (nombre,clave,sexo,perfil)values('$this->nombre','$this->clave','$this->sexo','$this->perfil')");
         $consulta->execute();
         return $nuevoNombre;
     }
@@ -78,15 +86,11 @@ class Usuario
         return $usuariosResultado;
     }
 
-    public static function ValidarUsuario($nombre, $clave) {
+    public static function ValidarUsuario($nombre, $clave, $sexo) {
         $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-        $consulta =$objetoAccesoDato->RetornarConsulta("select * from usuarios where nombre = '$nombre' and clave = '$clave'");
+        $consulta =$objetoAccesoDato->RetornarConsulta("select * from usuarios where nombre = '$nombre' and clave = '$clave' and sexo = '$sexo'");
         $consulta->execute();
         $usuariosResultado= $consulta->fetchObject('Usuario');
         return $usuariosResultado;
-    }
-
-    public function toString() {
-        return "\nUsuario #$this->id -> ".$this->GetClave();
     }
 }
